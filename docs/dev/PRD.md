@@ -193,12 +193,12 @@ The project serves as a professional portfolio piece demonstrating real-world mo
 
 ### Backend
 - **Runtime:** Node.js
-- **Framework:** Express.js or NestJS
+- **Framework:** Express.js
 - **API Documentation:** Swagger/OpenAPI
 - **Authentication:** JWT (JSON Web Tokens)
 
 ### Database
-- **Primary:** PostgreSQL / MySQL / MongoDB (team to select one)
+- **Primary:** MySQL
 - **ORM/Query Builder:** Sequelize, TypeORM, or Mongoose
 - **Migrations:** Database versioning tools
 

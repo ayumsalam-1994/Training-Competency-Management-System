@@ -1,0 +1,172 @@
+# Training & Competency Management System (TCMS)
+A full-stack Angular + Node project designed for a 5-person team, showcasing real-world modular development and professional engineering practices.
+
+---
+
+## 🎯 Project Goal
+Build a Training & Competency Management System where employees can:
+- Enroll in courses  
+- Take quizzes  
+- Track competencies & certifications  
+- Receive expiry reminders  
+- View analytics dashboards  
+
+Employers see teamwork, architecture thinking, and production-quality structure.
+
+---
+
+# 🚧 Development Stages (Recommended Workflow)
+
+## **Stage 1 — Project Foundation**
+- Initialize Angular workspace
+- Initialize backend (Express/Nest)
+- Set up shared folder structure
+- Create database schema (SQL or NoSQL)
+- Implement authentication (JWT + roles)
+- Configure environment variables
+
+**Deliverables:**  
+Working login flow + basic project scaffolding.
+
+---
+
+## **Stage 2 — Course Management Module**
+- Course CRUD  
+- Modules & lessons  
+- File references (PDFs, videos, links)  
+- Search & categorization  
+- Angular UI for course listing + detail page  
+
+**Deliverables:**  
+Admin can create/edit courses. Employees can view and enroll.
+
+---
+
+## **Stage 3 — Quiz & Assessment Module**
+- Quiz creation  
+- MCQ support  
+- Quiz attempt submission  
+- Auto-grading  
+- Result history  
+
+**Deliverables:**  
+End-to-end quiz functionality.
+
+---
+
+## **Stage 4 — Competency & Certification Module**
+- Map competencies to job roles  
+- Track user progress  
+- Generate basic certificate PDF  
+- Expiry notifications (cron job)  
+
+**Deliverables:**  
+Competency dashboard + PDF certificate download.
+
+---
+
+## **Stage 5 — Analytics Dashboard + Final Polish**
+- Charts: course enrollment, pass rates, competency completion  
+- Export CSV  
+- UI polishing with Angular Material  
+- Add sample data & demo user accounts  
+- Prepare README + demo script  
+
+**Deliverables:**  
+A polished, presentation-ready system.
+
+---
+
+# 🏗️ Technology Stack
+**Frontend:** Angular 17+, Angular Material, Chart.js / ngx-charts  
+**Backend:** Node.js (Express or NestJS)  
+**Database:** PostgreSQL / MySQL / MongoDB (choose 1 for the whole team)  
+**Other:** JWT, Swagger, Docker (optional)
+
+---
+
+# 👥 Team Modules (5 Members)
+
+### **1. Auth & User Management (Member A)**
+- Login, Register, Roles  
+- JWT Auth Guard  
+- User CRUD  
+
+### **2. Courses Module (Member B)**
+- Courses, Modules, Lessons  
+- Filters + search  
+
+### **3. Quiz Module (Member C)**
+- Quiz builder  
+- MCQ questions  
+- User quiz attempts  
+
+### **4. Competency Module (Member D)**
+- Competency assignment  
+- Certificates  
+- Expiry reminders  
+
+### **5. Analytics Module (Member E)**
+- Reporting API  
+- Charts + dashboards  
+- CSV export  
+
+---
+
+# 📡 API Endpoints (Summary Only)
+
+### Auth
+- POST /auth/login  
+- POST /auth/register  
+- GET /auth/profile  
+
+### Courses
+- GET /courses  
+- POST /courses  
+- GET /courses/:id  
+
+### Quizzes
+- GET /quizzes/course/:courseId  
+- POST /quizzes/:id/attempt  
+
+### Competencies
+- GET /competencies  
+- POST /competencies/assign  
+
+### Analytics
+- GET /analytics/overview  
+- GET /analytics/courses  
+- GET /analytics/competencies  
+
+---
+
+# 🎨 Angular Frontend Structure
+
+```
+src/app/
+  auth/
+  courses/
+  quizzes/
+  competencies/
+  dashboard/
+  shared/
+    components/
+    services/
+    models/
+```
+
+---
+
+# 🤖 Instructions for VSCode AI Agent
+
+AI Agent should:
+1. Generate full backend folder structure  
+2. Generate full Angular frontend structure  
+3. Build endpoints following the API above  
+4. Produce consistent, typed, modular code  
+5. Add tests + seed data  
+6. Generate documentation where needed  
+7. Follow the development stages strictly  
+
+Your outputs must be: **clean, maintainable, professional**.
+
