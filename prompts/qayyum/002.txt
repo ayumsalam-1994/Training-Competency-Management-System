@@ -1,0 +1,4 @@
+Create Todo list for each member based on the PRD, one todolist for each phase for each member in their own respective folders. 
+Then, on another md, highlight who to start which task and at which point should each member update their completed task to each other or waiting other members to complete task before proceeding their task as if in an actual production. 
+Files and folders should be stored under docs/dev.
+Do not commit.
