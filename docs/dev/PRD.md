@@ -469,7 +469,7 @@ backend/
 
 ## 👥 Team Structure & Responsibilities
 
-### Member A: Authentication & User Management
+### Member A: Authentication & User Management [QAYYUM]
 **Modules:**
 - User registration and login
 - JWT authentication guards
@@ -485,7 +485,7 @@ backend/
 
 ---
 
-### Member B: Course Management Module
+### Member B: Course Management Module [LEO]
 **Modules:**
 - Course creation and management
 - Module and lesson organization
@@ -501,7 +501,7 @@ backend/
 
 ---
 
-### Member C: Quiz & Assessment Module
+### Member C: Quiz & Assessment Module [HARIZ]
 **Modules:**
 - Quiz builder and configuration
 - Question management (MCQ, true/false, etc.)
@@ -517,7 +517,7 @@ backend/
 
 ---
 
-### Member D: Competency & Certification Module
+### Member D: Competency & Certification Module [HANIF]
 **Modules:**
 - Competency framework definition
 - Competency assignment
@@ -533,7 +533,7 @@ backend/
 
 ---
 
-### Member E: Analytics & Reporting Module
+### Member E: Analytics & Reporting Module [SUREN]
 **Modules:**
 - Analytics data collection and processing
 - Dashboard visualization
