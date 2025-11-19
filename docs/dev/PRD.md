@@ -199,13 +199,13 @@ The project serves as a professional portfolio piece demonstrating real-world mo
 
 ### Database
 - **Primary:** MySQL
-- **ORM/Query Builder:** Sequelize, TypeORM, or Mongoose
+- ~~**ORM/Query Builder: Sequelize, TypeORM, or Mongoose~~ We will not be using any ORM
 - **Migrations:** Database versioning tools
 
 ### DevOps & Tools
 - **Containerization:** Docker (optional)
 - **Version Control:** Git
-- **Package Management:** npm/yarn
+- **Package Management:** npm ~~/yarn~~
 - **Testing:** Jest, Jasmine, Karma
 - **Code Quality:** ESLint, Prettier
 

@@ -1,0 +1,8 @@
+﻿<h2>Dashboard</h2>
+<div *ngIf="user">
+  <p>Welcome, {{ user.email }} (role: {{ user.roleId }})</p>
+  <button (click)="logout()">Logout</button>
+</div>
+<div *ngIf="!user">
+  <p>Please <a routerLink="/login">login</a>.</p>
+</div>

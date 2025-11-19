@@ -1,0 +1,4 @@
+switch to real angular app and replace lowdb with mySQL. No ORM will be used. do not commit.
+DB access is fixed. continue full auth flow test.
+
+add buttons to test out clicking manually then update guide for other members to start off.

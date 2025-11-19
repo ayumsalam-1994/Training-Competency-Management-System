@@ -21,7 +21,7 @@ Employers see teamwork, architecture thinking, and production-quality structure.
 - Initialize Angular workspace
 - Initialize backend (Express/Nest)
 - Set up shared folder structure
-- Create database schema (SQL or NoSQL)
+- Create database schema (SQL)
 - Implement authentication (JWT + roles)
 - Configure environment variables
 
@@ -80,7 +80,7 @@ A polished, presentation-ready system.
 # 🏗️ Technology Stack
 **Frontend:** Angular 17+, Angular Material, Chart.js / ngx-charts  
 **Backend:** Node.js (Express or NestJS)  
-**Database:** PostgreSQL / MySQL / MongoDB (choose 1 for the whole team)  
+**Database:** MySQL
 **Other:** JWT, Swagger, Docker (optional)
 
 ---

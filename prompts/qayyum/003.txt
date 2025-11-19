@@ -1,0 +1,5 @@
+I am qayyum. Can you start to do my todo list for phase 1.
+
+Create the angular front end so I can see something and express server back end
+
+Start building the front end and back end application structure and qayyum's task phase 1 in this working folder. Do not commit or push.

@@ -6,14 +6,21 @@
 
 ## Checklist
 
-- [ ] Initialize auth service and controller
-- [ ] Implement registration endpoint `/auth/register`
-- [ ] Implement login endpoint `/auth/login` with JWT issuance
-- [ ] Add password hashing and reset flow (bcrypt + reset token)
+- [x] Initialize auth service and controller  
+	- ✅ Implemented minimal Express auth module in `backend/src/routes/auth.js` and `backend/src/middleware/authMiddleware.js`.
+- [x] Implement registration endpoint `/auth/register`  
+	- ✅ Registers user in simple JSON DB and returns a JWT. See `backend/src/routes/auth.js`.
+- [x] Implement login endpoint `/auth/login` with JWT issuance  
+	- ✅ Login implemented; issues JWT with role claims.
+- [x] Add password hashing and reset flow (bcrypt + reset token)
+	- ✅ Password hashing implemented with bcrypt. Password reset not implemented yet.
 - [ ] Add basic user model and migrations (users table)
-- [ ] Implement role model and seed initial roles (Employee, Manager, Admin)
-- [ ] Implement middleware/guards to validate JWT and roles
-- [ ] Add `/auth/profile` endpoint and user CRUD skeleton
+- [x] Implement role model and seed initial roles (Employee, Manager, Admin)
+	- ✅ Roles are seeded by `backend/scripts/seedRoles.js` into the JSON DB.
+- [x] Implement middleware/guards to validate JWT and roles
+	- ✅ `authGuard` implemented at `backend/src/middleware/authMiddleware.js`; `GET /auth/profile` uses it.
+- [x] Add `/auth/profile` endpoint and user CRUD skeleton
+	- ✅ `/auth/profile` implemented; user retrieval returns id/email/role.
 - [ ] Add environment variables guidance in `docs/dev/notes.md`
 
 ## Acceptance Criteria
