@@ -1,0 +1,59 @@
+<div class="create-content-container">
+    <header class="page-header">
+        <button class="btn-back" (click)="goBack()">&larr; Back</button>
+        <h1>Course Content Editor</h1>
+        <p>Add sections and chapters to your course.</p>
+    </header>
+
+    <form [formGroup]="courseContentForm" (ngSubmit)="onSubmit()" class="content-form">
+        <div formArrayName="sections">
+            <div *ngFor="let section of sections.controls; let i = index" [formGroupName]="i" class="section-card">
+                <div class="section-header">
+                    <h3>Section {{ i + 1 }}</h3>
+                    <button type="button" class="btn-remove-section" (click)="removeSection(i)">Remove Section</button>
+                </div>
+
+                <div class="form-group">
+                    <label>Section Title</label>
+                    <input type="text" formControlName="title" placeholder="Enter section title">
+                </div>
+
+                <div class="chapters-container" formArrayName="chapters">
+                    <h4>Chapters</h4>
+                    <div *ngFor="let chapter of getChapters(i).controls; let j = index" [formGroupName]="j"
+                        class="chapter-card">
+                        <div class="chapter-header">
+                            <h5>Chapter {{ j + 1 }}</h5>
+                            <button type="button" class="btn-remove-chapter"
+                                (click)="removeChapter(i, j)">Remove</button>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Chapter Title</label>
+                            <input type="text" formControlName="title" placeholder="Enter chapter title">
+                        </div>
+
+                        <div class="form-group">
+                            <label>Type</label>
+                            <select formControlName="type">
+                                <option value="video">Video</option>
+                                <option value="text">Text</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Content (URL or Text)</label>
+                            <input type="text" formControlName="content" placeholder="Enter video URL or text content">
+                        </div>
+                    </div>
+                    <button type="button" class="btn-add-chapter" (click)="addChapter(i)">+ Add Chapter</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-actions">
+            <button type="button" class="btn-add-section" (click)="addSection()">+ Add New Section</button>
+            <button type="submit" class="btn-save" [disabled]="courseContentForm.invalid">Save Content</button>
+        </div>
+    </form>
+</div>
