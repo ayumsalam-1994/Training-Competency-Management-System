@@ -1,7 +1,23 @@
 ﻿<h2>Dashboard</h2>
 <div *ngIf="user">
   <p>Welcome, {{ user.email }} (role: {{ user.roleId }})</p>
-  <button (click)="logout()">Logout</button>
+  
+  <div class="test-buttons">
+    <h3>Manual Test Buttons</h3>
+    <button (click)="testHealthCheck()">Test Health Check</button>
+    <button (click)="testProfile()">Test Profile API</button>
+    <button (click)="testLoginAPI()">Test Login API</button>
+    <button (click)="testRegisterAPI()">Test Register API</button>
+  </div>
+  
+  <div class="test-results" *ngIf="testResult">
+    <h4>Test Result:</h4>
+    <pre>{{ testResult }}</pre>
+  </div>
+  
+  <div class="logout-section">
+    <button (click)="logout()">Logout</button>
+  </div>
 </div>
 <div *ngIf="!user">
   <p>Please <a routerLink="/login">login</a>.</p>

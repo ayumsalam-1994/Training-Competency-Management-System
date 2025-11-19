@@ -1,1 +1,62 @@
 ﻿/* dashboard styles */
+.test-buttons {
+  margin: 20px 0;
+  padding: 15px;
+  border: 2px solid #e0e0e0;
+  border-radius: 8px;
+  background-color: #f9f9f9;
+}
+
+.test-buttons h3 {
+  margin-top: 0;
+  color: #333;
+}
+
+.test-buttons button {
+  margin: 5px 10px 5px 0;
+  padding: 8px 16px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.test-buttons button:hover {
+  background-color: #0056b3;
+}
+
+.test-results {
+  margin: 20px 0;
+  padding: 15px;
+  border: 2px solid #28a745;
+  border-radius: 8px;
+  background-color: #f8fff8;
+}
+
+.test-results pre {
+  background-color: #f4f4f4;
+  padding: 10px;
+  border-radius: 4px;
+  overflow-x: auto;
+  font-size: 12px;
+}
+
+.logout-section {
+  margin-top: 30px;
+  padding-top: 20px;
+  border-top: 1px solid #ddd;
+}
+
+.logout-section button {
+  background-color: #dc3545;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.logout-section button:hover {
+  background-color: #c82333;
+}

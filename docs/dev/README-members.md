@@ -2,7 +2,11 @@
 
 This guide helps the team work consistently on the Training Competency Management System. It explains the repo layout for dev docs, how to update your per-phase todo lists, PR/branching conventions, and the handoff process.
 
+**🎉 PHASE 1 AUTH SYSTEM COMPLETE! 🎉**
+The Angular frontend and MySQL backend auth system is now fully functional. See the [Team Startup Guide](./TEAM-STARTUP-GUIDE.md) for complete setup instructions and API documentation.
+
 **File locations**
+- **NEW**: Team Startup Guide: `docs/dev/TEAM-STARTUP-GUIDE.md` ⭐ **START HERE**
 - Project PRD: `docs/dev/PRD.md`
 - Member todo lists: `docs/dev/<member>/phase-<n>-todo.md` (e.g., `docs/dev/qayyum/phase-1-todo.md`)
 - Team coordination doc: `docs/dev/coordination.md`
@@ -65,38 +69,42 @@ Extras
 ---
 File created: `docs/dev/README-members.md` — feel free to request edits or specify extra sections.
 
-## Quick plan — who starts what first
+## Quick plan — who starts what next (UPDATED - Auth Complete!)
 
-This short plan assigns who should begin work first and why. Use it to prioritize sprint-day 1 tasks.
+The core auth system has been implemented and tested! Team members can now begin their individual Phase 1 tasks using the established auth foundation.
 
-- **Qayyum (Member A)** — Start first: implement core auth (`/auth/register`, `/auth/login`), JWT issuance, password hashing, and seed roles. Other modules depend on auth and RBAC.
-  - Deliverable: working login/register endpoints, seeded roles, basic auth guard.
+**✅ COMPLETED by Qayyum:**
+- Angular 20.3.0 frontend with standalone components
+- MySQL backend with users/roles tables
+- JWT authentication with login/register endpoints
+- Auth guard and protected routes
+- Manual testing dashboard with API test buttons
 
-- **Leo (Member B)** — Start in parallel (scaffold and basic endpoints): create course model, initial migration, and basic `/courses` endpoints and UI placeholders. Once Qayyum provides auth, protect admin routes.
-  - Deliverable: `/courses` GET/POST endpoints and sample UI.
+**🚀 READY TO START - Phase 1 Tasks:**
 
-- **Hariz (Member C)** — Start in parallel (scaffold): scaffold quiz module and expose sample `/quizzes` endpoints so other members can verify contracts.
-  - Deliverable: placeholder quiz endpoints and UI.
+- **Leo (Member B)** — Frontend UI Components: Build course listing, user dashboard, and enrollment components using the existing auth system. The auth service and protected routes are ready for integration.
+  - Start with: Course listing component and integrate with auth service for user state
 
-- **Hanif (Member D)** — Start in parallel (scaffold): scaffold competency and certificate models and a placeholder certificate generation endpoint.
-  - Deliverable: competency/certificate schema and placeholder endpoints.
+- **Hariz (Member C)** — Database Schema Expansion: Add course, quiz, and enrollment tables to the existing MySQL database. Build API endpoints for course management.
+  - Start with: Course schema and `/api/courses` endpoints using existing auth middleware
 
-- **Suren (Member E)** — Start in parallel (scaffold): scaffold analytics module and define initial metrics schema so other members know what telemetry to emit.
-  - Deliverable: analytics routes and stub metrics.
+- **Hanif (Member D)** — DevOps Setup: Containerize the Angular/Express/MySQL stack with Docker and set up CI/CD pipeline for deployment.
+  - Start with: Docker Compose setup for the complete auth system
 
-### First practical sequence
-1. Qayyum finishes basic auth (guards + roles).
-2. Leo, Hariz, Hanif, Suren integrate auth checks into their endpoints.
-3. Leo finalizes course endpoints; Hariz and Hanif consume course data.
-4. Hariz implements quiz attempts/results; Hanif uses results to verify competencies.
-5. Hanif implements certificate generation and expiry flows; Suren collects certificate metrics.
-6. Suren finalizes dashboard and polish.
+- **Suren (Member E)** — Testing Framework: Set up Jest/Cypress testing for the auth system and create test templates for other modules.
+  - Start with: API tests for existing auth endpoints and component tests for login/register
 
-### Short immediate tasks (copy-paste to your phase todo)
-- Qayyum: implement `/auth/register` + `/auth/login` and seed roles.
-- Leo: create `courses` model + `/courses` GET returning sample data.
-- Hariz: create `/quizzes` GET returning sample quiz objects.
-- Hanif: add `competencies` model and placeholder `/certificates/generate` endpoint.
-- Suren: define analytics schema and create `/analytics/overview` stub.
+### Next Steps Instructions
+1. **Follow the [Team Startup Guide](./TEAM-STARTUP-GUIDE.md)** to set up your local environment
+2. **Test the manual dashboard** at `http://localhost:4200/dashboard` to verify auth system works
+3. **Review API documentation** in the startup guide for integration patterns
+4. **Update your individual phase-1-todo.md** files as you complete tasks
+5. **Create feature branches** following the naming convention below
+
+### Integration Notes
+- **Auth Service**: Import from `frontend/src/app/services/auth.ts` for user state and JWT management
+- **Protected Routes**: Use existing auth guard pattern in your new route configurations  
+- **API Middleware**: Backend auth middleware is ready at `backend/src/middleware/auth.js`
+- **Database Connection**: MySQL pool and helper functions available in `backend/src/utils/db.js`
 
 
