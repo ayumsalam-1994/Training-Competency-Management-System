@@ -2,6 +2,12 @@
 
 This is a minimal Express-based backend scaffold to run the Phase 1 auth functionality locally.
 
+MySQL workbench:
+
+double click and open mySQL connection user: root. key in password: root.
+Select 'schema' (left panel). Right-click on the panel and create schema. 
+name schema 'tcms'.
+
 Quick start (PowerShell):
 
 ```powershell
