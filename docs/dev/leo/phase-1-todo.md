@@ -2,16 +2,17 @@
 
 **Owner**: Leo (Member B) — Course Management
 
-**Stage**: Project Foundation (Week 1)
+**Focus**: UI — Course Builder (Create)
 
 ## Checklist
 
-- [ ] Create course model and initial migration
-- [ ] Scaffold course controller and service
-- [ ] Add basic course list and detail API endpoints
-- [ ] Add placeholder UI components (course list/detail)
-- [ ] Coordinate with Qayyum to ensure auth-protected admin routes
+- [ ] Design & Implement `Add Course` Page UI (Basic Info: Title, Description, Category, Thumbnail)
+- [ ] Design & Implement `Create Course` Page UI (Curriculum Builder)
+- [ ] Implement UI for adding `Sections` to a course
+- [ ] Implement UI for adding `Chapters` (Lessons) to a section
+- [ ] Create Mock Service to handle local state for the course builder
 
 ## Acceptance Criteria
 
-- Course API returns sample data and UI placeholders render
+- User can enter course details and structure (Sections/Chapters) in the UI.
+- Data is stored temporarily in a service (Mock).

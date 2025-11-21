@@ -2,14 +2,19 @@
 
 **Owner**: Leo (Member B) — Course Management
 
-**Stage**: Competency & Certification (Week 4)
+**Focus**: Backend — Core API & Database
 
 ## Checklist
 
-- [ ] Provide APIs to mark course-based competencies as achieved
-- [ ] Integrate with certification flow to trigger certificate issuance
-- [ ] Expose course completion data to competency service
+- [ ] Design Database Schema (`courses`, `sections`, `chapters`)
+- [ ] Create MySQL Tables using `db.js` / Migration script
+- [ ] Implement `POST /api/courses` (Create Course)
+- [ ] Implement `GET /api/courses` (List Courses)
+- [ ] Implement `GET /api/courses/:id` (Get Course Details)
+- [ ] Implement `PUT /api/courses/:id` (Update Course)
+- [ ] Implement `DELETE /api/courses/:id` (Delete Course)
 
 ## Acceptance Criteria
 
-- Competency module receives course completion events successfully
+- API Endpoints are functional and persist data to MySQL.
+- Postman/Curl tests pass for all CRUD operations.

@@ -2,17 +2,17 @@
 
 **Owner**: Leo (Member B) — Course Management
 
-**Stage**: Course Management (Week 2)
+**Focus**: UI — Student Experience (Discovery & View)
 
 ## Checklist
 
-- [ ] Implement full Course CRUD API (admin-protected)
-- [ ] Implement Modules and Lessons models and endpoints
-- [ ] Implement file/resource handling for course materials
-- [ ] Implement search and filter API
-- [ ] Implement enrollment endpoint integration with user profiles
+- [ ] Design & Implement `Course List` / `Dashboard` UI (Grid of Course Cards)
+- [ ] Design & Implement `Course Detail` Page UI (Overview, Syllabus, Enroll Button)
+- [ ] Design & Implement `Search & Filter` Sidebar/Bar (Filter by Category, Search by Title)
+- [ ] Update Mock Service to provide a list of dummy courses
 
 ## Acceptance Criteria
 
-- Admins can create/edit/delete courses and add modules/lessons
-- Course resources can be uploaded or linked
+- User can browse a list of mock courses.
+- User can search/filter the list.
+- User can click a course to view details.

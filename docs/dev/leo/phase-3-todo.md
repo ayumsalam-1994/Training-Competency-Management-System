@@ -2,14 +2,16 @@
 
 **Owner**: Leo (Member B) — Course Management
 
-**Stage**: Quiz & Assessment (Week 3)
+**Focus**: UI — Manager Experience (Edit & Manage)
 
 ## Checklist
 
-- [ ] Expose course lesson data needed by quiz module
-- [ ] Provide endpoints for retrieving module/lesson content for quizzes
-- [ ] Coordinate with Quiz owner for content linking
+- [ ] Design & Implement `My Courses` / `Manage Courses` Dashboard (Table View)
+- [ ] Add `Edit` button functionality (Re-use Course Builder UI with pre-filled data)
+- [ ] Add `Delete` confirmation modal and functionality
+- [ ] Add `Enrollment` status indicator (Mock)
 
 ## Acceptance Criteria
 
-- Quiz system can retrieve course context for question associations
+- Manager can view a list of their created courses.
+- Manager can edit or delete a course (UI only, updating Mock Service).
