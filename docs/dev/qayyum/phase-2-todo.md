@@ -1,18 +1,26 @@
 # Qayyum — Phase 2 (Stage 2) TODO
 
-**Owner**: Qayyum (Member A) — Authentication & User Management
+**Owner**: Qayyum (Member D) — Competency & Certification Module
 
-**Stage**: Course Management (Week 2)
+**Stage**: Competency Framework Core (Week 2)
 
 ## Checklist
 
-- [ ] Integrate auth guards into course endpoints (protect create/edit)
-- [ ] Ensure role checks for enrollment operations
-- [ ] Support user enrollment tracking in user profile
-- [ ] Add endpoints to view user enrollments and progress
-- [ ] Update migrations if enrollment user relations are needed
+- [ ] Implement competency framework database tables
+- [ ] Create competency CRUD endpoints (`/competencies`)
+- [ ] Implement competency-to-job-role mapping system
+- [ ] Create competency assignment endpoints  
+- [ ] Build competency progress tracking logic
+- [ ] Implement `/competencies/:id/assign` for managers
+- [ ] Create `/user/competencies` endpoint for user progress
+- [ ] Add competency proficiency level system
+- [ ] Integrate with course completion events for progress updates
+- [ ] Create basic competency UI components
+- [ ] Add competency routes to Angular frontend
 
 ## Acceptance Criteria
 
-- Course create/edit endpoints respect auth and roles
-- Users can view their enrollments and related permissions
+- Competency framework is functional with CRUD operations
+- Competencies can be assigned to job roles and users  
+- Progress tracking works with course completion
+- Basic competency management UI is available

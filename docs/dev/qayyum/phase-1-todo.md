@@ -1,30 +1,34 @@
 # Qayyum — Phase 1 (Stage 1) TODO
 
-**Owner**: Qayyum (Member A) — Authentication & User Management
+**Owner**: Qayyum (Member D) — Competency & Certification Module
 
 **Stage**: Project Foundation (Week 1)
 
 ## Checklist
 
-- [x] Initialize auth service and controller  
-	- ✅ Implemented minimal Express auth module in `backend/src/routes/auth.js` and `backend/src/middleware/authMiddleware.js`.
-- [x] Implement registration endpoint `/auth/register`  
-	- ✅ Registers user in simple JSON DB and returns a JWT. See `backend/src/routes/auth.js`.
-- [x] Implement login endpoint `/auth/login` with JWT issuance  
-	- ✅ Login implemented; issues JWT with role claims.
-- [x] Add password hashing and reset flow (bcrypt + reset token)
-	- ✅ Password hashing implemented with bcrypt. Password reset not implemented yet.
-- [ ] Add basic user model and migrations (users table)
-- [x] Implement role model and seed initial roles (Employee, Manager, Admin)
-	- ✅ Roles are seeded by `backend/scripts/seedRoles.js` into the JSON DB.
-- [x] Implement middleware/guards to validate JWT and roles
-	- ✅ `authGuard` implemented at `backend/src/middleware/authMiddleware.js`; `GET /auth/profile` uses it.
-- [x] Add `/auth/profile` endpoint and user CRUD skeleton
-	- ✅ `/auth/profile` implemented; user retrieval returns id/email/role.
-- [ ] Add environment variables guidance in `docs/dev/notes.md`
+### ✅ Auth System Handover Complete
+- [x] ✅ HANDED OVER: Full auth system to Hanif
+  - [x] Angular frontend with auth service and guards
+  - [x] MySQL backend with JWT authentication
+  - [x] User registration and login endpoints
+  - [x] Role-based access control (Employee/Manager/Admin)
+  - [x] Manual testing dashboard functional
+  - [x] Team startup guide created for handover
+
+### 🎯 New Focus: Competency & Certification Module
+- [ ] Study existing auth system for integration patterns
+- [ ] Design competency framework database schema
+- [ ] Plan competency-to-role mapping structure  
+- [ ] Design certificate generation workflow
+- [ ] Scaffold competency module backend structure
+- [ ] Create competency and certificate models
+- [ ] Plan competency progress tracking system
+- [ ] Design certificate expiry notification system
+- [ ] Create placeholder competency endpoints
 
 ## Acceptance Criteria
 
-- Users can register and log in locally
-- JWT tokens are returned and validated by guards
-- Initial role-based access enforcement exists for admin-only routes
+- ✅ Auth system successfully transitioned to Hanif
+- Competency module structure is planned and documented
+- Basic competency and certificate models are created
+- Integration approach with auth system is defined

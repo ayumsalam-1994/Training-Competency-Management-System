@@ -1,15 +1,25 @@
 # Hanif — Phase 2 (Stage 2) TODO
 
-**Owner**: Hanif (Member D) — Competency & Certification
+**Owner**: Hanif (Member A) — Authentication & User Management + Attendance System
 
-**Stage**: Course Management (Week 2)
+**Stage**: Attendance System Core (Week 2)
 
 ## Checklist
 
-- [ ] Define competency mapping to course/module outcomes
-- [ ] Provide APIs for marking competency progress
-- [ ] Integrate with course completion events
+- [ ] Implement attendance database schema and models
+- [ ] Create `/attendance/checkin` endpoint with location validation
+- [ ] Create `/attendance/checkout` endpoint with time calculations
+- [ ] Implement `/attendance/status` endpoint for current status
+- [ ] Add location-based validation (GPS coordinates)
+- [ ] Create time tracking logic (work hours, break times)
+- [ ] Add basic attendance history endpoints
+- [ ] Implement attendance middleware for auth protection
+- [ ] Create frontend attendance components (check-in/out buttons)
+- [ ] Add attendance routes to Angular app
 
 ## Acceptance Criteria
 
-- Course completion updates competency progress correctly
+- Employees can check-in and check-out successfully
+- Location validation works for authorized locations  
+- Time tracking calculates work hours accurately
+- Basic attendance UI is functional
