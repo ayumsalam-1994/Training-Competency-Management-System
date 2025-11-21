@@ -15,8 +15,7 @@ export const routes: Routes = [
       { path: 'dashboard', loadComponent: () => import('./pages/dashboard/dashboard').then(m => m.Dashboard) },
       { path: 'add-course', component: AddCourse },
       { path: 'create-coursepage/:courseId', loadComponent: () => import('./pages/create-coursepage/create-coursepage').then(m => m.CreateCoursepage) },
-      // Placeholder for View Course as requested
-      { path: 'view-course', redirectTo: 'dashboard' }
+      { path: 'view-course', loadComponent: () => import('./pages/view-course/view-course').then(m => m.ViewCourse) }
     ]
   },
 

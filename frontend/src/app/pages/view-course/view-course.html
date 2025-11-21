@@ -1,0 +1,23 @@
+<div class="view-course-container">
+    <div class="course-grid">
+        <div class="course-card" *ngFor="let course of courses">
+            <div class="thumbnail-container">
+                <img [src]="course.thumbnail" [alt]="course.title" class="thumbnail">
+            </div>
+            <div class="card-details">
+                <div class="author-avatar">
+                    <img [src]="course.avatar" [alt]="course.author">
+                </div>
+                <div class="meta-info">
+                    <h3 class="course-title">{{ course.title }}</h3>
+                    <div class="author-name">{{ course.author }}</div>
+                    <div class="course-stats">
+                        <span>{{ course.views }}</span>
+                        <span class="separator">•</span>
+                        <span>{{ course.time }}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
