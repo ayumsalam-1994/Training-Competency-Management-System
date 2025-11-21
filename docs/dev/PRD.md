@@ -180,6 +180,29 @@ The project serves as a professional portfolio piece demonstrating real-world mo
 
 ---
 
+### Feature 6: Attendance & Time Tracking System
+**Description:** Employee check-in/checkout system for training session attendance and work time tracking  
+**Functional Requirements:**
+- Employee check-in/check-out functionality
+- Manual and automated time tracking
+- Daily, weekly, and monthly attendance reports
+- Integration with training sessions and courses
+- Attendance history and analytics
+- Late arrival and early departure tracking
+- Break time management
+- Overtime calculation
+- Manager approval workflow for time adjustments
+
+**Acceptance Criteria:**
+- ✅ Employees can check-in and check-out with timestamp recording
+- ✅ Location validation ensures check-ins are from authorized locations
+- ✅ System tracks total work hours and break times
+- ✅ Attendance reports can be generated and exported
+- ✅ Managers can view team attendance analytics
+- ✅ Integration with training sessions for accurate attendance tracking
+
+---
+
 ## 🏗️ Technology Stack
 
 ### Frontend
@@ -262,6 +285,17 @@ The project serves as a professional portfolio piece demonstrating real-world mo
 | `/analytics/users` | GET | User performance metrics | Yes (Manager) |
 | `/analytics/export` | GET | Export analytics as CSV | Yes (Manager) |
 
+### Attendance Endpoints
+| Endpoint | Method | Description | Auth Required |
+|----------|--------|-------------|----------------|
+| `/attendance/checkin` | POST | Employee check-in | Yes |
+| `/attendance/checkout` | POST | Employee check-out | Yes |
+| `/attendance/status` | GET | Get current attendance status | Yes |
+| `/attendance/history` | GET | Get attendance history | Yes |
+| `/attendance/report` | GET | Generate attendance report | Yes (Manager) |
+| `/attendance/team-report` | GET | Team attendance analytics | Yes (Manager) |
+| `/attendance/approve` | POST | Approve time adjustments | Yes (Manager) |
+
 ---
 
 ## 🎨 Frontend Application Structure
@@ -289,6 +323,12 @@ src/app/
 │   ├── competency-list/
 │   ├── competency-detail/
 │   ├── certificate-list/
+│   └── services/
+├── attendance/
+│   ├── checkin-checkout/
+│   ├── attendance-history/
+│   ├── time-tracking/
+│   ├── attendance-reports/
 │   └── services/
 ├── dashboard/
 │   ├── analytics/
@@ -341,6 +381,11 @@ backend/
 │   ├── analytics/
 │   │   ├── controllers/
 │   │   ├── services/
+│   │   └── dto/
+│   ├── attendance/
+│   │   ├── controllers/
+│   │   ├── services/
+│   │   ├── models/
 │   │   └── dto/
 │   ├── users/
 │   │   ├── controllers/
@@ -469,19 +514,26 @@ backend/
 
 ## 👥 Team Structure & Responsibilities
 
-### Member A: Authentication & User Management [QAYYUM]
+### Member A: Authentication & User Management + Attendance System [Hanif]
 **Modules:**
 - User registration and login
 - JWT authentication guards
 - Role-based access control
 - User CRUD operations
 - Password management
+- Employee check-in/checkout system
+- Attendance tracking and analytics
+- Time management and reporting
+- Location-based validation
 
 **Deliverables:**
 - Auth service
 - Auth guards
 - User controller/service
 - Auth middleware
+- Attendance controller/service
+- Time tracking system
+- Attendance reports and analytics
 
 ---
 
@@ -517,7 +569,7 @@ backend/
 
 ---
 
-### Member D: Competency & Certification Module [HANIF]
+### Member D: Competency & Certification Module [Qayyum]
 **Modules:**
 - Competency framework definition
 - Competency assignment
