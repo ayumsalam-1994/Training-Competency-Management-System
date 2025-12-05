@@ -2,7 +2,6 @@
 import { AddCourse } from './pages/add-course/add-course';
 
 export const routes: Routes = [
-<<<<<<< Updated upstream
   // Public Routes (No Navbar)
   { path: 'login', loadComponent: () => import('./pages/login/login').then(m => m.Login) },
   { path: 'register', loadComponent: () => import('./pages/register/register').then(m => m.Register) },
@@ -16,20 +15,12 @@ export const routes: Routes = [
       { path: 'dashboard', loadComponent: () => import('./pages/dashboard/dashboard').then(m => m.Dashboard) },
       { path: 'add-course', component: AddCourse },
       { path: 'create-coursepage/:courseId', loadComponent: () => import('./pages/create-coursepage/create-coursepage').then(m => m.CreateCoursepage) },
-      { path: 'view-course', loadComponent: () => import('./pages/view-course/view-course').then(m => m.ViewCourse) }
+      { path: 'view-course', loadComponent: () => import('./pages/view-course/view-course').then(m => m.ViewCourse) },
+      { path: 'quiz', loadComponent: () => import('./components/quiz/quiz-list').then(m => m.QuizListComponent) },
+      { path: 'quiz/:quizId', loadComponent: () => import('./components/quiz/quiz-attempt').then(m => m.QuizAttemptComponent) },
+      { path: 'quiz/:quizId/attempt/:attemptId/results', loadComponent: () => import('./components/quiz/quiz-results').then(m => m.QuizResultsComponent) }
     ]
   },
 
-=======
-  { path: 'add-course', component: AddCourse },
-  { path: 'create-coursepage/:courseId', loadComponent: () => import('./pages/create-coursepage/create-coursepage').then(m => m.CreateCoursepage) },
-  { path: 'quiz', loadComponent: () => import('./components/quiz/quiz-list').then(m => m.QuizListComponent) },
-  { path: 'quiz/:quizId', loadComponent: () => import('./components/quiz/quiz-attempt').then(m => m.QuizAttemptComponent) },
-  { path: 'quiz/:quizId/attempt/:attemptId/results', loadComponent: () => import('./components/quiz/quiz-results').then(m => m.QuizResultsComponent) },
-  { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
-  { path: 'login', loadComponent: () => import('./components/login/login').then(m => m.Login) },
-  { path: 'register', loadComponent: () => import('./components/register/register').then(m => m.Register) },
-  { path: 'dashboard', loadComponent: () => import('./components/dashboard/dashboard').then(m => m.Dashboard) },
->>>>>>> Stashed changes
   { path: '**', redirectTo: 'dashboard' },
 ];
