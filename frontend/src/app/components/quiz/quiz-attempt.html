@@ -1,0 +1,56 @@
+<div class="quiz-attempt-container" *ngIf="!submitted">
+    <div class="quiz-header-attempt">
+        <div class="quiz-title-section">
+            <h1>{{ quiz?.title }}</h1>
+            <div class="progress-bar">
+                <div class="progress-fill" [style.width.%]="getProgressPercentage()"></div>
+            </div>
+            <p class="progress-text">Question {{ currentQuestionIndex + 1 }} of {{ questions.length }}</p>
+        </div>
+
+        <div class="quiz-controls">
+            <div class="timer" [class.warning]="timeRemaining < 300">
+                <span class="timer-label">Time Remaining:</span>
+                <span class="timer-value">{{ formatTime(timeRemaining) }}</span>
+            </div>
+            <div class="answered-count">{{ getAnsweredCount() }}/{{ questions.length }} Answered</div>
+        </div>
+    </div>
+
+    <div class="question-container" *ngIf="questions.length > 0">
+        <div class="current-question">
+            <h2>{{ getCurrentQuestion().question_text }}</h2>
+            <span class="question-type">{{ getCurrentQuestion().question_type | uppercase }}</span>
+        </div>
+
+        <div class="options-container">
+            <div *ngFor="let option of getCurrentQuestion().options" class="option"
+                [class.selected]="isAnswerSelected(option.id)" (click)="selectAnswer(option.id)">
+                <input type="radio" [checked]="isAnswerSelected(option.id)" [value]="option.id" class="option-radio">
+                <span class="option-text">{{ option.option_text }}</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="navigation-buttons">
+        <button class="btn btn-secondary" (click)="previousQuestion()" [disabled]="currentQuestionIndex === 0">
+            ← Previous
+        </button>
+
+        <button class="btn btn-warning" (click)="submitQuiz()">
+            Submit Quiz
+        </button>
+
+        <button class="btn btn-secondary" (click)="nextQuestion()"
+            [disabled]="currentQuestionIndex === questions.length - 1">
+            Next →
+        </button>
+    </div>
+
+    <div *ngIf="error" class="error-message">{{ error }}</div>
+    <div *ngIf="loading" class="loading-message">Submitting quiz...</div>
+</div>
+
+<div class="quiz-submitted" *ngIf="submitted">
+    <p>Quiz submitted successfully! Redirecting to results...</p>
+</div>

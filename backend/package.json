@@ -6,7 +6,8 @@
   "scripts": {
     "start": "node src/index.js",
     "dev": "nodemon src/index.js",
-    "seed-roles": "node scripts/seedRoles.js"
+    "seed-roles": "node scripts/seedRoles.js",
+    "seed-quiz": "node scripts/seedQuiz.js"
   },
   "dependencies": {
     "bcrypt": "^5.1.0",

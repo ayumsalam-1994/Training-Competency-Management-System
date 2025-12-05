@@ -1,0 +1,51 @@
+<div class="quiz-container">
+    <div class="quiz-header">
+        <h1>Available Quizzes</h1>
+        <p class="subtitle">Test your knowledge with our interactive quizzes</p>
+    </div>
+
+    <div *ngIf="loading" class="loading">
+        <p>Loading quizzes...</p>
+    </div>
+
+    <div *ngIf="error" class="error-message">
+        {{ error }}
+    </div>
+
+    <div *ngIf="!loading && quizzes.length > 0" class="quizzes-grid">
+        <div *ngFor="let quiz of quizzes" class="quiz-card">
+            <div class="quiz-card-header">
+                <h2>{{ quiz.title }}</h2>
+                <span class="difficulty" [style.background-color]="getDifficultyColor(quiz.difficulty)">
+                    {{ quiz.difficulty | uppercase }}
+                </span>
+            </div>
+
+            <p class="quiz-description">{{ quiz.description }}</p>
+
+            <div class="quiz-info">
+                <div class="info-item" *ngIf="quiz.duration">
+                    <span class="label">Duration:</span>
+                    <span class="value">{{ quiz.duration }} mins</span>
+                </div>
+                <div class="info-item">
+                    <span class="label">Passing Score:</span>
+                    <span class="value">{{ quiz.passing_score }}%</span>
+                </div>
+            </div>
+
+            <div class="quiz-actions">
+                <button [routerLink]="['/quiz', quiz.id]" class="btn btn-primary">
+                    Take Quiz
+                </button>
+                <button [routerLink]="['/quiz', quiz.id, 'results']" class="btn btn-secondary">
+                    View Results
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div *ngIf="!loading && quizzes.length === 0" class="no-quizzes">
+        <p>No quizzes available yet.</p>
+    </div>
+</div>
