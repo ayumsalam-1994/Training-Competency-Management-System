@@ -13,6 +13,7 @@ export const routes: Routes = [
     children: [
       { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
       { path: 'dashboard', loadComponent: () => import('./pages/dashboard/dashboard').then(m => m.Dashboard) },
+      { path: 'competencies', loadComponent: () => import('./pages/competencies/competencies').then(m => m.CompetenciesPage) },
       { path: 'add-course', component: AddCourse },
       { path: 'create-coursepage/:courseId', loadComponent: () => import('./pages/create-coursepage/create-coursepage').then(m => m.CreateCoursepage) },
       { path: 'view-course', loadComponent: () => import('./pages/view-course/view-course').then(m => m.ViewCourse) }

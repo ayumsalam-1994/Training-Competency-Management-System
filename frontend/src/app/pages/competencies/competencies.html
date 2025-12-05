@@ -1,0 +1,127 @@
+<div class="competencies-page">
+  <!-- Header Section -->
+  <div class="page-header">
+    <h1 class="page-title">My Competencies & Certificates</h1>
+    <p class="page-subtitle">Track your skills and certifications</p>
+  </div>
+
+  <!-- Loading State -->
+  <div *ngIf="loading" class="loading-state">
+    <div class="spinner"></div>
+    <p>Loading competencies...</p>
+  </div>
+
+  <!-- Error State -->
+  <div *ngIf="error" class="error-state">
+    <div class="error-icon">⚠️</div>
+    <p>{{ error }}</p>
+    <button (click)="loadData()" class="retry-button">Try Again</button>
+  </div>
+
+  <!-- Main Content -->
+  <div *ngIf="!loading && !error" class="content">
+    
+    <!-- Progress Overview -->
+    <div class="overview-section">
+      <h2>Progress Overview</h2>
+      
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-number">{{ getCompetencyProgress().achieved }}</div>
+          <div class="stat-label">Competencies Achieved</div>
+          <div class="stat-sublabel">of {{ getCompetencyProgress().total }} total</div>
+        </div>
+        
+        <div class="stat-card">
+          <div class="stat-number">{{ getCompetencyProgress().percentage }}%</div>
+          <div class="stat-label">Completion Rate</div>
+          <div class="progress-bar">
+            <div class="progress-fill" [style.width.%]="getCompetencyProgress().percentage"></div>
+          </div>
+        </div>
+        
+        <div class="stat-card">
+          <div class="stat-number">{{ getCertificatesByStatus().active }}</div>
+          <div class="stat-label">Active Certificates</div>
+          <div class="stat-sublabel" *ngIf="getCertificatesByStatus().expiringSoon > 0">
+            {{ getCertificatesByStatus().expiringSoon }} expiring soon
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Competencies List -->
+    <div class="competencies-section">
+      <h2>Available Competencies</h2>
+      
+      <div class="competencies-grid">
+        <div *ngFor="let competency of competencies" 
+             class="competency-card"
+             [class.achieved]="competency.achieved">
+          
+          <div class="competency-header">
+            <h3 class="competency-title">{{ competency.name }}</h3>
+            <span class="level-badge" [class]="getLevelColor(competency.level)">
+              {{ competency.level | titlecase }}
+            </span>
+          </div>
+          
+          <p class="competency-description">{{ competency.description }}</p>
+          
+          <div class="competency-footer">
+            <div class="achievement-status">
+              <span *ngIf="competency.achieved" class="achieved-badge">
+                ✅ Achieved {{ competency.achievedAt | date:'shortDate' }}
+              </span>
+              <span *ngIf="!competency.achieved" class="pending-badge">
+                📋 In Progress
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Certificates Section -->
+    <div class="certificates-section">
+      <h2>My Certificates</h2>
+      
+      <div *ngIf="certificates.length === 0" class="empty-state">
+        <div class="empty-icon">📜</div>
+        <p>No certificates yet. Complete competencies to earn certificates!</p>
+      </div>
+      
+      <div *ngIf="certificates.length > 0" class="certificates-grid">
+        <div *ngFor="let certificate of certificates" class="certificate-card">
+          
+          <div class="certificate-header">
+            <h3 class="certificate-title">{{ certificate.competencyName }}</h3>
+            <span class="status-badge" [class]="getStatusColor(certificate.status)">
+              {{ certificate.status | titlecase }}
+            </span>
+          </div>
+          
+          <div class="certificate-dates">
+            <div class="date-item">
+              <span class="date-label">Issued:</span>
+              <span class="date-value">{{ certificate.issuedAt | date:'shortDate' }}</span>
+            </div>
+            <div class="date-item">
+              <span class="date-label">Expires:</span>
+              <span class="date-value">{{ certificate.expiresAt | date:'shortDate' }}</span>
+            </div>
+          </div>
+          
+          <div class="certificate-actions">
+            <button 
+              (click)="downloadCertificate(certificate.id, certificate.competencyName)"
+              class="download-button">
+              📥 Download PDF
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
