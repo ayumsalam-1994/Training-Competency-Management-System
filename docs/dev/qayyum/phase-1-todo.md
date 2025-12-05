@@ -16,15 +16,16 @@
   - [x] Team startup guide created for handover
 
 ### 🎯 New Focus: Competency & Certification Module
-- [ ] Study existing auth system for integration patterns
+- [x] ✅ COMPLETED: Study existing auth system for integration patterns
 - [ ] Design competency framework database schema
 - [ ] Plan competency-to-role mapping structure  
 - [ ] Design certificate generation workflow
 - [ ] Scaffold competency module backend structure
-- [ ] Create competency and certificate models
+- [x] ✅ COMPLETED: Create competency and certificate models (frontend service)
 - [ ] Plan competency progress tracking system
 - [ ] Design certificate expiry notification system
-- [ ] Create placeholder competency endpoints
+- [x] ✅ COMPLETED: Create placeholder competency endpoints (frontend mock data)
+- [x] ✅ COMPLETED: Build basic frontend UI components and navigation
 
 ## Acceptance Criteria
 
