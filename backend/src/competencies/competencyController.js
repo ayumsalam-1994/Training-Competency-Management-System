@@ -117,16 +117,97 @@ class CompetencyController {
   async downloadCertificate(req, res) {
     try {
       const { id } = req.params;
+      const userId = req.user.id;
+      
+      const certificate = await competencyService.getCertificateForDownload(parseInt(id), userId);
       
       // TODO: Implement PDF generation and download
-      // For now, return a placeholder response
-      res.status(501).json({ 
-        error: 'PDF generation not yet implemented',
-        message: 'This feature will generate and download a PDF certificate'
+      // For now, return certificate data
+      res.json({ 
+        message: 'PDF generation not yet implemented',
+        certificate: certificate
       });
     } catch (error) {
       console.error('Error downloading certificate:', error);
+      if (error.message.includes('not found')) {
+        return res.status(404).json({ error: error.message });
+      }
       res.status(500).json({ error: 'Failed to download certificate' });
+    }
+  }
+
+  /**
+   * GET /competencies/stats
+   * Get current user's competency statistics
+   */
+  async getUserCompetencyStats(req, res) {
+    try {
+      const userId = req.user.id;
+      const stats = await competencyService.getUserCompetencyStats(userId);
+      res.json(stats);
+    } catch (error) {
+      console.error('Error fetching competency stats:', error);
+      res.status(500).json({ error: 'Failed to fetch competency statistics' });
+    }
+  }
+
+  /**
+   * POST /competencies/assign
+   * Assign a competency to a user
+   */
+  async assignCompetencyToUser(req, res) {
+    try {
+      const { userId, competencyId, proficiencyLevel, notes } = req.body;
+      const targetUserId = userId || req.user.id;
+      
+      if (!competencyId) {
+        return res.status(400).json({ error: 'competencyId is required' });
+      }
+      
+      const result = await competencyService.assignCompetencyToUser(
+        targetUserId, 
+        competencyId, 
+        proficiencyLevel || 'beginner',
+        notes || null
+      );
+      res.status(201).json(result);
+    } catch (error) {
+      console.error('Error assigning competency:', error);
+      res.status(500).json({ error: 'Failed to assign competency' });
+    }
+  }
+
+  /**
+   * PUT /competencies/user/:userId/competency/:competencyId
+   * Update user's competency proficiency level
+   */
+  async updateUserCompetencyLevel(req, res) {
+    try {
+      const { userId, competencyId } = req.params;
+      const { proficiencyLevel } = req.body;
+      const targetUserId = parseInt(userId) || req.user.id;
+      
+      if (!proficiencyLevel) {
+        return res.status(400).json({ error: 'proficiencyLevel is required (beginner/intermediate/advanced/expert)' });
+      }
+      
+      const result = await competencyService.updateUserCompetencyLevel(
+        targetUserId, 
+        parseInt(competencyId),
+        proficiencyLevel
+      );
+      
+      if (!result.success) {
+        return res.status(404).json({ error: 'User competency record not found' });
+      }
+      
+      res.json(result);
+    } catch (error) {
+      console.error('Error updating competency level:', error);
+      if (error.message.includes('Invalid proficiency level')) {
+        return res.status(400).json({ error: error.message });
+      }
+      res.status(500).json({ error: 'Failed to update competency level' });
     }
   }
 }

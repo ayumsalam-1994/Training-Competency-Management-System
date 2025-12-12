@@ -1,163 +1,243 @@
+const db = require('../utils/db');
+
 /**
  * Competency Service
- * Business logic for competency and certificate operations
+ * Handles all business logic for competency management
+ * Uses real database queries via db.js helper functions
  */
-
 class CompetencyService {
   /**
-   * Get all available competencies
-   * @returns {Array} List of competencies
+   * Get all competencies from the database
+   * @returns {Promise<Array>} Array of competency objects
    */
   async getAllCompetencies() {
-    // TODO: Replace with actual database query
-    // For now, return mock data for testing
-    return [
-      {
-        id: 1,
-        name: 'Basic Safety Training',
-        description: 'Fundamental workplace safety protocols and procedures',
-        level: 'beginner',
-        created_at: new Date('2024-01-01'),
-        updated_at: new Date('2024-01-01')
-      },
-      {
-        id: 2,
-        name: 'Advanced Technical Skills',
-        description: 'Advanced programming and system administration',
-        level: 'advanced',
-        created_at: new Date('2024-01-01'),
-        updated_at: new Date('2024-01-01')
-      },
-      {
-        id: 3,
-        name: 'Leadership Fundamentals',
-        description: 'Basic leadership principles and team management',
-        level: 'intermediate',
-        created_at: new Date('2024-01-01'),
-        updated_at: new Date('2024-01-01')
-      }
-    ];
+    try {
+      const competencies = await db.getAllCompetencies();
+      return competencies;
+    } catch (error) {
+      console.error('Error fetching competencies:', error);
+      throw new Error('Failed to fetch competencies');
+    }
   }
 
   /**
    * Get a specific competency by ID
    * @param {number} id - Competency ID
-   * @returns {Object|null} Competency object or null
+   * @returns {Promise<Object|null>} Competency object or null if not found
    */
   async getCompetencyById(id) {
-    // TODO: Replace with actual database query
-    const competencies = await this.getAllCompetencies();
-    return competencies.find(c => c.id === parseInt(id)) || null;
+    try {
+      const competency = await db.getCompetencyById(id);
+      return competency;
+    } catch (error) {
+      console.error('Error fetching competency:', error);
+      throw new Error('Failed to fetch competency');
+    }
   }
 
   /**
    * Create a new competency
    * @param {Object} competencyData - Competency data
-   * @returns {Object} Created competency
+   * @param {string} competencyData.name - Competency name
+   * @param {string} competencyData.description - Competency description
+   * @param {string} competencyData.level - Competency level (beginner/intermediate/advanced)
+   * @returns {Promise<Object>} Created competency with insertId
    */
   async createCompetency(competencyData) {
-    // TODO: Replace with actual database insert
-    const { name, description, level } = competencyData;
-    
-    // Validation
-    if (!name || !description) {
-      throw new Error('Name and description are required');
+    try {
+      const { name, description, level } = competencyData;
+      const result = await db.createCompetency(name, description, level);
+      return {
+        id: result.insertId,
+        name,
+        description,
+        level,
+        created_at: new Date()
+      };
+    } catch (error) {
+      console.error('Error creating competency:', error);
+      throw new Error('Failed to create competency');
     }
-
-    const newCompetency = {
-      id: Date.now(), // Mock ID generation
-      name,
-      description,
-      level: level || 'beginner',
-      created_at: new Date(),
-      updated_at: new Date()
-    };
-
-    return newCompetency;
   }
 
   /**
-   * Get user's achieved competencies
+   * Get all competencies for a specific user with progress
    * @param {number} userId - User ID
-   * @returns {Array} List of user competencies
+   * @returns {Promise<Array>} Array of user competency objects with progress
    */
   async getUserCompetencies(userId) {
-    // TODO: Replace with actual database query
-    return [
-      {
-        id: 1,
-        user_id: userId,
-        competency_id: 1,
-        competency_name: 'Basic Safety Training',
-        proficiency_level: 'beginner',
-        achieved_at: new Date('2024-01-15'),
-        achieved: true
-      },
-      {
-        id: 2,
-        user_id: userId,
-        competency_id: 3,
-        competency_name: 'Leadership Fundamentals',
-        proficiency_level: 'intermediate',
-        achieved_at: new Date('2024-02-20'),
-        achieved: true
-      }
-    ];
+    try {
+      const competencies = await db.getUserCompetencies(userId);
+      return competencies;
+    } catch (error) {
+      console.error('Error fetching user competencies:', error);
+      throw new Error('Failed to fetch user competencies');
+    }
   }
 
   /**
-   * Get user's certificates
+   * Get all certificates for a specific user
    * @param {number} userId - User ID
-   * @returns {Array} List of certificates
+   * @returns {Promise<Array>} Array of certificate objects
    */
   async getUserCertificates(userId) {
-    // TODO: Replace with actual database query
-    return [
-      {
-        id: 1,
-        user_id: userId,
-        competency_id: 1,
-        competency_name: 'Basic Safety Training',
-        issued_at: new Date('2024-01-15'),
-        expires_at: new Date('2025-01-15'),
-        status: 'active',
-        verification_code: 'CERT-2024-001'
-      },
-      {
-        id: 2,
-        user_id: userId,
-        competency_id: 3,
-        competency_name: 'Leadership Fundamentals',
-        issued_at: new Date('2024-02-20'),
-        expires_at: new Date('2024-12-20'),
-        status: 'expiring-soon',
-        verification_code: 'CERT-2024-002'
-      }
-    ];
+    try {
+      const certificates = await db.getUserCertificates(userId);
+      return certificates;
+    } catch (error) {
+      console.error('Error fetching user certificates:', error);
+      throw new Error('Failed to fetch user certificates');
+    }
   }
 
   /**
-   * Issue a certificate to a user
+   * Issue a certificate to a user for completing a competency
    * @param {number} userId - User ID
    * @param {number} competencyId - Competency ID
-   * @returns {Object} Created certificate
+   * @param {Date} expiresAt - Certificate expiry date (optional)
+   * @returns {Promise<Object>} Created certificate object
    */
-  async issueCertificate(userId, competencyId) {
-    // TODO: Replace with actual database insert
-    // TODO: Generate PDF certificate
-    // TODO: Generate unique verification code
-    
-    const certificate = {
-      id: Date.now(),
-      user_id: userId,
-      competency_id: competencyId,
-      issued_at: new Date(),
-      expires_at: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000), // 1 year
-      status: 'active',
-      verification_code: `CERT-${Date.now()}`
-    };
+  async issueCertificate(userId, competencyId, expiresAt = null) {
+    try {
+      const result = await db.issueCertificate(userId, competencyId, expiresAt);
+      return {
+        id: result.insertId,
+        user_id: userId,
+        competency_id: competencyId,
+        issued_at: new Date(),
+        expires_at: expiresAt
+      };
+    } catch (error) {
+      console.error('Error issuing certificate:', error);
+      throw new Error('Failed to issue certificate');
+    }
+  }
 
-    return certificate;
+  /**
+   * Assign a competency to a user
+   * @param {number} userId - User ID
+   * @param {number} competencyId - Competency ID
+   * @param {string} proficiencyLevel - Proficiency level (beginner/intermediate/advanced/expert)
+   * @param {string} notes - Optional notes
+   * @returns {Promise<Object>} Created user_competency record
+   */
+  async assignCompetencyToUser(userId, competencyId, proficiencyLevel = 'beginner', notes = null) {
+    try {
+      // Validate proficiency level
+      const validLevels = ['beginner', 'intermediate', 'advanced', 'expert'];
+      if (!validLevels.includes(proficiencyLevel)) {
+        proficiencyLevel = 'beginner';
+      }
+      
+      const result = await db.assignCompetencyToUser(userId, competencyId, proficiencyLevel, notes);
+      return {
+        id: result.insertId || result.id,
+        user_id: userId,
+        competency_id: competencyId,
+        proficiency_level: proficiencyLevel,
+        notes: notes,
+        achieved_at: new Date()
+      };
+    } catch (error) {
+      console.error('Error assigning competency to user:', error);
+      throw new Error('Failed to assign competency to user');
+    }
+  }
+
+  /**
+   * Update a user's proficiency level for a competency
+   * @param {number} userId - User ID
+   * @param {number} competencyId - Competency ID
+   * @param {string} proficiencyLevel - New proficiency level (beginner/intermediate/advanced/expert)
+   * @returns {Promise<Object>} Update result
+   */
+  async updateUserCompetencyLevel(userId, competencyId, proficiencyLevel) {
+    try {
+      // Validate proficiency level
+      const validLevels = ['beginner', 'intermediate', 'advanced', 'expert'];
+      if (!validLevels.includes(proficiencyLevel)) {
+        throw new Error('Invalid proficiency level. Must be: beginner, intermediate, advanced, or expert');
+      }
+      
+      const success = await db.updateUserCompetencyLevel(userId, competencyId, proficiencyLevel);
+      return {
+        success: success,
+        userId: userId,
+        competencyId: competencyId,
+        proficiencyLevel: proficiencyLevel
+      };
+    } catch (error) {
+      console.error('Error updating user competency level:', error);
+      throw error;
+    }
+  }
+
+  /**
+   * Get competency statistics for a user
+   * @param {number} userId - User ID
+   * @returns {Promise<Object>} Stats object with counts and levels
+   */
+  async getUserCompetencyStats(userId) {
+    try {
+      const [competencies, certificates] = await Promise.all([
+        this.getUserCompetencies(userId),
+        this.getUserCertificates(userId)
+      ]);
+
+      const totalCompetencies = competencies.length;
+      // Consider 'advanced' and 'expert' as achieved/mastered
+      const masteredCompetencies = competencies.filter(c => 
+        c.proficiency_level === 'expert' || c.proficiency_level === 'advanced'
+      ).length;
+      // Beginner and intermediate are in progress
+      const inProgressCompetencies = competencies.filter(c => 
+        c.proficiency_level === 'beginner' || c.proficiency_level === 'intermediate'
+      ).length;
+      const totalCertificates = certificates.length;
+
+      // Calculate a progress score (beginner=25, intermediate=50, advanced=75, expert=100)
+      const levelScores = { beginner: 25, intermediate: 50, advanced: 75, expert: 100 };
+      const totalScore = competencies.reduce((sum, c) => sum + (levelScores[c.proficiency_level] || 0), 0);
+      const averageProgress = totalCompetencies > 0 ? Math.round(totalScore / totalCompetencies) : 0;
+
+      return {
+        totalCompetencies,
+        masteredCompetencies,
+        inProgressCompetencies,
+        totalCertificates,
+        averageProgress
+      };
+    } catch (error) {
+      console.error('Error fetching user competency stats:', error);
+      throw new Error('Failed to fetch competency statistics');
+    }
+  }
+
+  /**
+   * Generate a certificate download (PDF generation placeholder)
+   * @param {number} certificateId - Certificate ID
+   * @param {number} userId - User ID (for authorization)
+   * @returns {Promise<Object>} Certificate data for PDF generation
+   */
+  async getCertificateForDownload(certificateId, userId) {
+    try {
+      const certificates = await this.getUserCertificates(userId);
+      const certificate = certificates.find(c => c.id === certificateId);
+      
+      if (!certificate) {
+        throw new Error('Certificate not found or access denied');
+      }
+
+      // Return certificate data that can be used for PDF generation
+      return {
+        ...certificate,
+        downloadReady: true,
+        generatedAt: new Date()
+      };
+    } catch (error) {
+      console.error('Error fetching certificate for download:', error);
+      throw error;
+    }
   }
 }
 
