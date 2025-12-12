@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ActivatedRoute, RouterModule } from '@angular/router';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { QuizService } from '../../services/quiz.service';
 
 @Component({
@@ -20,7 +20,8 @@ export class QuizResultsComponent implements OnInit {
 
     constructor(
         private quizService: QuizService,
-        private route: ActivatedRoute
+        private route: ActivatedRoute,
+        private router: Router
     ) { }
 
     ngOnInit() {
@@ -61,6 +62,6 @@ export class QuizResultsComponent implements OnInit {
     }
 
     retakeQuiz() {
-        window.location.href = `/quiz/${this.quizId}`;
+        this.router.navigate(['/quiz', this.quizId]);
     }
 }

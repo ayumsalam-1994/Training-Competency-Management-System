@@ -139,6 +139,17 @@ async function getQuestionsByQuizId(quiz_id) {
   }
 }
 
+async function getQuestionsByQuizIdWithAnswers(quiz_id) {
+  const connection = await pool.getConnection();
+  try {
+    const query = 'SELECT id, quiz_id, question_text, question_type, correct_answer, explanation, time_limit FROM questions WHERE quiz_id = ? ORDER BY id ASC';
+    const [rows] = await connection.execute(query, [quiz_id]);
+    return rows;
+  } finally {
+    connection.release();
+  }
+}
+
 async function createQuizOption(question_id, option_text, is_correct = false) {
   const connection = await pool.getConnection();
   try {
@@ -430,6 +441,7 @@ module.exports = {
   getAllQuizzes,
   createQuestion,
   getQuestionsByQuizId,
+  getQuestionsByQuizIdWithAnswers,
   createQuizOption,
   getOptionsByQuestionId,
   createQuizAttempt,

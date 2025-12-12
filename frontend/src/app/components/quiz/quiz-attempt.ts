@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ActivatedRoute, RouterModule } from '@angular/router';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { QuizService } from '../../services/quiz.service';
 
 @Component({
@@ -12,7 +12,8 @@ import { QuizService } from '../../services/quiz.service';
 })
 export class QuizAttemptComponent implements OnInit {
     quizId: number = 0;
-    attemptId: number = 0;
+    attemptId: string | number = 0;
+    realAttemptId: number | null = null;
     quiz: any = null;
     questions: any[] = [];
     currentQuestionIndex = 0;
@@ -25,7 +26,8 @@ export class QuizAttemptComponent implements OnInit {
 
     constructor(
         private quizService: QuizService,
-        private route: ActivatedRoute
+        private route: ActivatedRoute,
+        private router: Router
     ) { }
 
     ngOnInit() {
@@ -98,11 +100,73 @@ export class QuizAttemptComponent implements OnInit {
         this.loading = true;
         this.submitted = true;
 
-        this.quizService.submitQuiz(this.quizId, this.attemptId).subscribe({
+        // If user answered at least one question, submit answers
+        if (Object.keys(this.userAnswers).length > 0) {
+            // Submit the first answer to convert temp ID to real ID
+            const firstQuestionId = Object.keys(this.userAnswers)[0];
+            const firstAnswerId = parseInt(firstQuestionId);
+
+            this.quizService.submitAnswer(
+                this.quizId,
+                this.attemptId,
+                firstAnswerId,
+                this.userAnswers[firstAnswerId]
+            ).subscribe({
+                next: (response: any) => {
+                    // Get the real attempt ID from first response
+                    const realAttemptId = response.data?.attempt_id || this.attemptId;
+
+                    // Now submit remaining answers with the real attempt ID
+                    const remainingQuestionIds = Object.keys(this.userAnswers).slice(1);
+
+                    if (remainingQuestionIds.length === 0) {
+                        // Only one question answered, go straight to complete
+                        this.completeQuiz(realAttemptId);
+                    } else {
+                        // Submit remaining answers
+                        const submitRemainingAnswers = remainingQuestionIds.map((questionId) => {
+                            const qId = parseInt(questionId);
+                            return this.quizService.submitAnswer(
+                                this.quizId,
+                                realAttemptId,
+                                qId,
+                                this.userAnswers[qId]
+                            ).toPromise();
+                        });
+
+                        Promise.all(submitRemainingAnswers)
+                            .then(() => {
+                                this.completeQuiz(realAttemptId);
+                            })
+                            .catch((err) => {
+                                console.error('Error submitting remaining answers:', err);
+                                this.error = 'Failed to submit all answers';
+                                this.submitted = false;
+                                this.loading = false;
+                            });
+                    }
+                },
+                error: (err) => {
+                    console.error('Error submitting first answer:', err);
+                    this.error = 'Failed to submit first answer: ' + (err.error?.error || err.message);
+                    this.submitted = false;
+                    this.loading = false;
+                }
+            });
+        } else {
+            // If no answers, don't count as attempt
+            this.error = 'Please answer at least one question before submitting';
+            this.submitted = false;
+            this.loading = false;
+        }
+    }
+
+    private completeQuiz(attemptId: string | number) {
+        this.quizService.submitQuiz(this.quizId, attemptId).subscribe({
             next: (response: any) => {
                 // Store results and navigate to results page
-                sessionStorage.setItem(`quiz-results-${this.attemptId}`, JSON.stringify(response.data));
-                window.location.href = `/quiz/${this.quizId}/attempt/${this.attemptId}/results`;
+                sessionStorage.setItem(`quiz-results-${attemptId}`, JSON.stringify(response.data));
+                this.router.navigate(['/quiz', this.quizId, 'attempt', attemptId, 'results']);
                 this.loading = false;
             },
             error: (err) => {

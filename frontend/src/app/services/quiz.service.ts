@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 @Injectable({
@@ -10,6 +10,15 @@ export class QuizService {
     private adminApiUrl = 'http://localhost:4000/admin/quiz';
 
     constructor(private http: HttpClient) { }
+
+    // Get authorization headers
+    private getAuthHeaders(): HttpHeaders {
+        const token = localStorage.getItem('auth_token');
+        return new HttpHeaders({
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+        });
+    }
 
     // ===== USER ENDPOINTS (Public) =====
 
@@ -30,86 +39,118 @@ export class QuizService {
 
     // Start a quiz attempt
     startAttempt(quizId: number): Observable<any> {
-        return this.http.post(`${this.apiUrl}/${quizId}/attempt/start`, {});
+        return this.http.post(`${this.apiUrl}/${quizId}/attempt/start`, {}, {
+            headers: this.getAuthHeaders()
+        });
     }
 
     // Submit an answer
-    submitAnswer(quizId: number, attemptId: number, questionId: number, userAnswer: any): Observable<any> {
+    submitAnswer(quizId: number, attemptId: string | number, questionId: number, userAnswer: any): Observable<any> {
         return this.http.post(`${this.apiUrl}/${quizId}/attempt/${attemptId}/answer`, {
             question_id: questionId,
             user_answer: userAnswer
+        }, {
+            headers: this.getAuthHeaders()
         });
     }
 
     // Complete quiz and get results
-    submitQuiz(quizId: number, attemptId: number): Observable<any> {
-        return this.http.post(`${this.apiUrl}/${quizId}/attempt/${attemptId}/submit`, {});
+    submitQuiz(quizId: number, attemptId: string | number): Observable<any> {
+        return this.http.post(`${this.apiUrl}/${quizId}/attempt/${attemptId}/submit`, {}, {
+            headers: this.getAuthHeaders()
+        });
     }
 
     // Get attempt results
-    getAttemptResults(quizId: number, attemptId: number): Observable<any> {
-        return this.http.get(`${this.apiUrl}/${quizId}/attempt/${attemptId}/results`);
+    getAttemptResults(quizId: number, attemptId: string | number): Observable<any> {
+        return this.http.get(`${this.apiUrl}/${quizId}/attempt/${attemptId}/results`, {
+            headers: this.getAuthHeaders()
+        });
     }
 
     // Get user's attempts
     getUserAttempts(quizId: number): Observable<any> {
-        return this.http.get(`${this.apiUrl}/${quizId}/my-attempts`);
+        return this.http.get(`${this.apiUrl}/${quizId}/my-attempts`, {
+            headers: this.getAuthHeaders()
+        });
     }
 
     // ===== ADMIN ENDPOINTS =====
 
     // Create a new quiz (admin)
     createAdminQuiz(quiz: any): Observable<any> {
-        return this.http.post(`${this.adminApiUrl}`, quiz);
+        return this.http.post(`${this.adminApiUrl}`, quiz, {
+            headers: this.getAuthHeaders()
+        });
     }
 
     // Update a quiz (admin)
     updateAdminQuiz(quizId: number, quiz: any): Observable<any> {
-        return this.http.put(`${this.adminApiUrl}/${quizId}`, quiz);
+        return this.http.put(`${this.adminApiUrl}/${quizId}`, quiz, {
+            headers: this.getAuthHeaders()
+        });
     }
 
     // Delete a quiz (admin)
     deleteAdminQuiz(quizId: number): Observable<any> {
-        return this.http.delete(`${this.adminApiUrl}/${quizId}`);
+        return this.http.delete(`${this.adminApiUrl}/${quizId}`, {
+            headers: this.getAuthHeaders()
+        });
     }
 
     // Get all questions for a quiz (admin - with editing info)
     getAdminQuestions(quizId: number): Observable<any> {
-        return this.http.get(`${this.adminApiUrl}/${quizId}/questions`);
+        return this.http.get(`${this.adminApiUrl}/${quizId}/questions`, {
+            headers: this.getAuthHeaders()
+        });
     }
 
     // Get a specific question (admin)
     getAdminQuestion(quizId: number, questionId: number): Observable<any> {
-        return this.http.get(`${this.adminApiUrl}/${quizId}/questions/${questionId}`);
+        return this.http.get(`${this.adminApiUrl}/${quizId}/questions/${questionId}`, {
+            headers: this.getAuthHeaders()
+        });
     }
 
     // Create a new question (admin)
     createAdminQuestion(quizId: number, question: any): Observable<any> {
-        return this.http.post(`${this.adminApiUrl}/${quizId}/questions`, question);
+        return this.http.post(`${this.adminApiUrl}/${quizId}/questions`, question, {
+            headers: this.getAuthHeaders()
+        });
     }
 
     // Update a question (admin)
     updateAdminQuestion(quizId: number, questionId: number, question: any): Observable<any> {
-        return this.http.put(`${this.adminApiUrl}/${quizId}/questions/${questionId}`, question);
+        return this.http.put(`${this.adminApiUrl}/${quizId}/questions/${questionId}`, question, {
+            headers: this.getAuthHeaders()
+        });
     }
 
     // Delete a question (admin)
     deleteAdminQuestion(quizId: number, questionId: number): Observable<any> {
-        return this.http.delete(`${this.adminApiUrl}/${quizId}/questions/${questionId}`);
+        return this.http.delete(`${this.adminApiUrl}/${quizId}/questions/${questionId}`, {
+            headers: this.getAuthHeaders()
+        });
     }
 
     // Create a question option (admin)
     createAdminOption(quizId: number, questionId: number, option: any): Observable<any> {
-        return this.http.post(`${this.adminApiUrl}/${quizId}/questions/${questionId}/options`, option);
+        return this.http.post(`${this.adminApiUrl}/${quizId}/questions/${questionId}/options`, option, {
+            headers: this.getAuthHeaders()
+        });
     }
 
     // Update a question option (admin)
     updateAdminOption(quizId: number, questionId: number, optionId: number, option: any): Observable<any> {
-        return this.http.put(`${this.adminApiUrl}/${quizId}/questions/${questionId}/options/${optionId}`, option);
+        return this.http.put(`${this.adminApiUrl}/${quizId}/questions/${questionId}/options/${optionId}`, option, {
+            headers: this.getAuthHeaders()
+        });
     }
 
     // Delete a question option (admin)
     deleteAdminOption(quizId: number, questionId: number, optionId: number): Observable<any> {
-        return this.http.delete(`${this.adminApiUrl}/${quizId}/questions/${questionId}/options/${optionId}`);
+        return this.http.delete(`${this.adminApiUrl}/${quizId}/questions/${questionId}/options/${optionId}`, {
+            headers: this.getAuthHeaders()
+        });
     }
 }

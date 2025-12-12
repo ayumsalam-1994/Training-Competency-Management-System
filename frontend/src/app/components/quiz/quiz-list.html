@@ -12,8 +12,20 @@
         {{ error }}
     </div>
 
-    <div *ngIf="!loading && quizzes.length > 0" class="quizzes-grid">
-        <div *ngFor="let quiz of quizzes" class="quiz-card">
+    <!-- Filter Section -->
+    <div *ngIf="!loading && quizzes.length > 0" class="filter-section">
+        <label for="difficulty-filter" class="filter-label">Filter by Difficulty:</label>
+        <div class="filter-buttons">
+            <button *ngFor="let difficulty of difficulties" (click)="onDifficultyChange(difficulty)" class="filter-btn"
+                [class.active]="selectedDifficulty === difficulty">
+                {{ difficulty | uppercase }}
+            </button>
+        </div>
+        <span class="result-count">{{ filteredQuizzes.length }} quiz(zes) found</span>
+    </div>
+
+    <div *ngIf="!loading && filteredQuizzes.length > 0" class="quizzes-grid">
+        <div *ngFor="let quiz of filteredQuizzes" class="quiz-card">
             <div class="quiz-card-header">
                 <h2>{{ quiz.title }}</h2>
                 <span class="difficulty" [style.background-color]="getDifficultyColor(quiz.difficulty)">
@@ -34,15 +46,49 @@
                 </div>
             </div>
 
+            <!-- User Progress Section -->
+            <div class="progress-section" *ngIf="hasAttempted(quiz.id)">
+                <div class="progress-header">
+                    <h4>Your Progress</h4>
+                </div>
+                <div class="progress-stats">
+                    <div class="stat-item">
+                        <span class="label">Attempts:</span>
+                        <span class="value">{{ getAttemptCount(quiz.id) }}</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="label">Best Score:</span>
+                        <span class="value">{{ getBestScore(quiz.id) }}%</span>
+                    </div>
+                    <div class="stat-item" *ngIf="getLatestAttempt(quiz.id)">
+                        <span class="label">Latest:</span>
+                        <span class="value">{{ getLatestAttempt(quiz.id).percentage }}% - {{
+                            formatDate(getLatestAttempt(quiz.id).completed_at) }}</span>
+                    </div>
+                    <div class="stat-item" *ngIf="getLatestAttempt(quiz.id)">
+                        <span class="label">Status:</span>
+                        <span class="value"
+                            [style.color]="getLatestAttempt(quiz.id).percentage >= quiz.passing_score ? '#28a745' : '#dc3545'">
+                            {{ getLatestAttempt(quiz.id).percentage >= quiz.passing_score ? 'PASSED ✓' : 'FAILED ✗' }}
+                        </span>
+                    </div>
+                </div>
+            </div>
+
             <div class="quiz-actions">
                 <button [routerLink]="['/quiz', quiz.id]" class="btn btn-primary">
-                    Take Quiz
+                    {{ hasAttempted(quiz.id) ? 'Retake Quiz' : 'Take Quiz' }}
                 </button>
-                <button [routerLink]="['/quiz', quiz.id, 'results']" class="btn btn-secondary">
+                <button [routerLink]="['/quiz', quiz.id, 'attempt', getLatestAttempt(quiz.id)?.id, 'results']"
+                    class="btn btn-secondary" *ngIf="hasAttempted(quiz.id) && getLatestAttempt(quiz.id)?.id">
                     View Results
                 </button>
             </div>
         </div>
+    </div>
+
+    <div *ngIf="!loading && quizzes.length > 0 && filteredQuizzes.length === 0" class="no-quizzes">
+        <p>No quizzes found with the selected difficulty level.</p>
     </div>
 
     <div *ngIf="!loading && quizzes.length === 0" class="no-quizzes">

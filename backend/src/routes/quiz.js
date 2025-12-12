@@ -4,6 +4,7 @@ const {
     getAllQuizzes,
     getQuizById,
     getQuestionsByQuizId,
+    getQuestionsByQuizIdWithAnswers,
     getOptionsByQuestionId,
     createQuizAttempt,
     getQuizAttemptById,
@@ -68,7 +69,7 @@ router.get('/:quizId/questions', async (req, res) => {
     }
 });
 
-// Start quiz attempt (requires auth)
+// Start quiz attempt (requires auth) - Just load quiz, don't create attempt yet
 router.post('/:quizId/attempt/start', authGuard, async (req, res) => {
     try {
         const { quizId } = req.params;
@@ -80,8 +81,8 @@ router.post('/:quizId/attempt/start', authGuard, async (req, res) => {
             return res.status(404).json({ error: 'Quiz not found' });
         }
 
-        // Create attempt
-        const attempt = await createQuizAttempt(userId, quizId);
+        // Generate a temporary attempt ID (will be created on first answer submission)
+        const tempAttemptId = `temp_${userId}_${quizId}_${Date.now()}`;
 
         // Get questions for this attempt
         const questions = await getQuestionsByQuizId(quizId);
@@ -101,7 +102,7 @@ router.post('/:quizId/attempt/start', authGuard, async (req, res) => {
         res.json({
             success: true,
             data: {
-                attempt_id: attempt.id,
+                attempt_id: tempAttemptId,
                 quiz: quiz,
                 questions: questionsWithOptions,
                 total_questions: questionsWithOptions.length,
@@ -117,34 +118,68 @@ router.post('/:quizId/attempt/:attemptId/answer', authGuard, async (req, res) =>
     try {
         const { attemptId, quizId } = req.params;
         const { question_id, user_answer } = req.body;
+        const userId = req.user.id;
 
-        if (!question_id || user_answer === undefined) {
+        if (!question_id || user_answer === undefined || user_answer === null || user_answer === '') {
             return res.status(400).json({ error: 'question_id and user_answer are required' });
         }
 
-        // Verify attempt exists and belongs to user
-        const attempt = await getQuizAttemptById(attemptId);
-        if (!attempt || attempt.user_id !== req.user.id || attempt.quiz_id !== parseInt(quizId)) {
-            return res.status(403).json({ error: 'Unauthorized access to this attempt' });
-        }
+        // Handle temporary attempt ID - create real attempt on first answer
+        let realAttemptId = attemptId;
+        if (attemptId.startsWith('temp_')) {
+            // Create the actual attempt on first answer submission
+            const attempt = await createQuizAttempt(userId, parseInt(quizId));
+            realAttemptId = attempt.id;
+        } else {
+            // Verify attempt exists and belongs to user
+            const attempt = await getQuizAttemptById(attemptId);
+            if (!attempt || attempt.user_id !== userId || attempt.quiz_id !== parseInt(quizId)) {
+                return res.status(403).json({ error: 'Unauthorized access to this attempt' });
+            }
 
-        if (attempt.status !== 'in_progress') {
-            return res.status(400).json({ error: 'Attempt is not in progress' });
+            if (attempt.status !== 'in_progress') {
+                return res.status(400).json({ error: 'Attempt is not in progress' });
+            }
         }
 
         // Get the question to verify correct answer
-        const question = await getQuestionsByQuizId(quizId);
-        const targetQuestion = question.find(q => q.id === parseInt(question_id));
+        const questions = await getQuestionsByQuizIdWithAnswers(quizId);
+        const targetQuestion = questions.find(q => q.id === parseInt(question_id));
 
         if (!targetQuestion) {
-            return res.status(404).json({ error: 'Question not found' });
+            return res.status(404).json({ error: `Question ${question_id} not found in quiz ${quizId}` });
+        }
+
+        // Get the option text for the user's answer (if it's an option ID)
+        let userAnswerText = user_answer;
+        if (!isNaN(user_answer)) {
+            // This is an option ID, get the actual option text
+            const options = await getOptionsByQuestionId(parseInt(question_id));
+            const selectedOption = options.find(opt => opt.id == user_answer);
+            if (!selectedOption) {
+                return res.status(400).json({ error: `Option ${user_answer} not found for question ${question_id}` });
+            }
+            userAnswerText = selectedOption.option_text;
         }
 
         // Check if answer is correct
-        const is_correct = targetQuestion.correct_answer === user_answer;
+        // For MCQ: compare with correct_answer letter (A, B, C, D)
+        // For True/False: compare with "true" or "false"
+        let is_correct = false;
+        if (targetQuestion.question_type === 'mcq') {
+            // Extract the letter from option_text (e.g., "A) something" -> "A")
+            const answerLetter = userAnswerText.charAt(0).toUpperCase();
+            is_correct = targetQuestion.correct_answer && targetQuestion.correct_answer.toUpperCase() === answerLetter;
+        } else if (targetQuestion.question_type === 'true_false') {
+            // For true/false, check if the option text is "True" or "False"
+            is_correct = targetQuestion.correct_answer && targetQuestion.correct_answer.toLowerCase() === userAnswerText.toLowerCase();
+        } else {
+            // For short answer, do a direct comparison
+            is_correct = targetQuestion.correct_answer === user_answer;
+        }
 
         // Submit answer
-        const answer = await submitQuizAnswer(attemptId, question_id, user_answer, is_correct);
+        const answer = await submitQuizAnswer(realAttemptId, question_id, user_answer, is_correct);
 
         res.json({
             success: true,
@@ -152,6 +187,7 @@ router.post('/:quizId/attempt/:attemptId/answer', authGuard, async (req, res) =>
                 answer_recorded: true,
                 question_id,
                 is_correct,
+                attempt_id: realAttemptId,
                 feedback: targetQuestion.explanation,
             },
         });
@@ -189,10 +225,20 @@ router.post('/:quizId/attempt/:attemptId/submit', authGuard, async (req, res) =>
             answers.map(async (answer) => {
                 const questions = await getQuestionsByQuizId(quizId);
                 const question = questions.find(q => q.id === answer.question_id);
+
+                // Get option text for MCQ and True/False questions
+                let userAnswerText = answer.user_answer;
+                if (answer.user_answer && !isNaN(answer.user_answer)) {
+                    // This is an option ID, fetch the option text
+                    const options = await getOptionsByQuestionId(answer.question_id);
+                    const selectedOption = options.find(opt => opt.id == answer.user_answer);
+                    userAnswerText = selectedOption ? selectedOption.option_text : answer.user_answer;
+                }
+
                 return {
                     question_id: answer.question_id,
                     question_text: question.question_text,
-                    user_answer: answer.user_answer,
+                    user_answer: userAnswerText,
                     correct_answer: question.correct_answer,
                     is_correct: answer.is_correct,
                     explanation: question.explanation,
@@ -234,12 +280,22 @@ router.get('/:quizId/attempt/:attemptId/results', authGuard, async (req, res) =>
 
         const answersWithDetails = await Promise.all(
             answers.map(async (answer) => {
-                const questions = await getQuestionsByQuizId(quizId);
+                const questions = await getQuestionsByQuizIdWithAnswers(quizId);
                 const question = questions.find(q => q.id === answer.question_id);
+
+                // Get option text for MCQ and True/False questions
+                let userAnswerText = answer.user_answer;
+                if (answer.user_answer && !isNaN(answer.user_answer)) {
+                    // This is an option ID, fetch the option text
+                    const options = await getOptionsByQuestionId(answer.question_id);
+                    const selectedOption = options.find(opt => opt.id == answer.user_answer);
+                    userAnswerText = selectedOption ? selectedOption.option_text : answer.user_answer;
+                }
+
                 return {
                     question_id: answer.question_id,
                     question_text: question.question_text,
-                    user_answer: answer.user_answer,
+                    user_answer: userAnswerText,
                     correct_answer: question.correct_answer,
                     is_correct: answer.is_correct,
                     explanation: question.explanation,

@@ -64,6 +64,8 @@ async function seedQuizzes() {
             'false',
             'Arrow functions do NOT have their own "this". They inherit "this" from the surrounding scope.'
         );
+        await createQuizOption(q1_4.id, 'True', false);
+        await createQuizOption(q1_4.id, 'False', true);
 
         const q1_5 = await createQuestion(
             quiz1.id,
@@ -108,6 +110,8 @@ async function seedQuizzes() {
             'true',
             'By default, useEffect runs after every render. You can control this with dependency arrays.'
         );
+        await createQuizOption(q2_2.id, 'True', true);
+        await createQuizOption(q2_2.id, 'False', false);
 
         const q2_3 = await createQuestion(
             quiz2.id,
@@ -166,6 +170,8 @@ async function seedQuizzes() {
             'true',
             'CSS is indeed an acronym for Cascading Style Sheets, used for styling HTML elements.'
         );
+        await createQuizOption(q3_2.id, 'True', true);
+        await createQuizOption(q3_2.id, 'False', false);
 
         const q3_3 = await createQuestion(
             quiz3.id,
