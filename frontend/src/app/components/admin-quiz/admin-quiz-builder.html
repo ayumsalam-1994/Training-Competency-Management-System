@@ -1,0 +1,178 @@
+<div class="admin-quiz-builder">
+    <div class="header">
+        <h1>{{ quizId ? 'Edit Quiz' : 'Create New Quiz' }}</h1>
+        <div class="breadcrumb">
+            <a [routerLink]="['/admin/quizzes']">Quizzes</a> / {{ quizId ? 'Edit' : 'Create' }}
+        </div>
+    </div>
+
+    <div *ngIf="error" class="alert alert-error">{{ error }}</div>
+    <div *ngIf="success" class="alert alert-success">{{ success }}</div>
+
+    <div class="tabs">
+        <button [class.active]="activeTab === 'quiz-info'" (click)="activeTab = 'quiz-info'" class="tab-btn">
+            Quiz Information
+        </button>
+        <button [class.active]="activeTab === 'questions'" (click)="activeTab = 'questions'" class="tab-btn"
+            [disabled]="!quizId">
+            Manage Questions
+        </button>
+    </div>
+
+    <!-- Quiz Info Tab -->
+    <div *ngIf="activeTab === 'quiz-info'" class="tab-content">
+        <form class="quiz-form">
+            <div class="form-group">
+                <label for="title">Quiz Title *</label>
+                <input id="title" type="text" [(ngModel)]="quiz.title" name="title" class="form-input" required>
+            </div>
+
+            <div class="form-group">
+                <label for="description">Description</label>
+                <textarea id="description" [(ngModel)]="quiz.description" name="description" class="form-textarea"
+                    rows="4"></textarea>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="duration">Duration (minutes)</label>
+                    <input id="duration" type="number" [(ngModel)]="quiz.duration" name="duration" class="form-input"
+                        min="1">
+                </div>
+
+                <div class="form-group">
+                    <label for="passing_score">Passing Score (%)</label>
+                    <input id="passing_score" type="number" [(ngModel)]="quiz.passing_score" name="passing_score"
+                        class="form-input" min="0" max="100">
+                </div>
+
+                <div class="form-group">
+                    <label for="difficulty">Difficulty</label>
+                    <select id="difficulty" [(ngModel)]="quiz.difficulty" name="difficulty" class="form-select">
+                        <option value="easy">Easy</option>
+                        <option value="medium">Medium</option>
+                        <option value="hard">Hard</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-actions">
+                <button type="button" (click)="saveQuiz()" class="btn btn-primary" [disabled]="loading">
+                    {{ loading ? 'Saving...' : 'Save Quiz' }}
+                </button>
+                <button type="button" [routerLink]="['/admin/quizzes']" class="btn btn-secondary">
+                    Cancel
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <!-- Questions Tab -->
+    <div *ngIf="activeTab === 'questions'" class="tab-content">
+        <div class="questions-header">
+            <h2>Questions ({{ questions.length }})</h2>
+            <button (click)="openQuestionForm()" class="btn btn-primary">
+                + Add Question
+            </button>
+        </div>
+
+        <!-- Question Form Modal -->
+        <div *ngIf="showQuestionForm" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2>{{ editingQuestionId ? 'Edit Question' : 'Add Question' }}</h2>
+                    <button class="close-btn" (click)="closeQuestionForm()">×</button>
+                </div>
+
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="q_text">Question Text *</label>
+                        <textarea id="q_text" [(ngModel)]="currentQuestion.question_text" class="form-textarea" rows="3"
+                            required></textarea>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="q_type">Question Type *</label>
+                            <select id="q_type" [(ngModel)]="currentQuestion.question_type" class="form-select">
+                                <option value="mcq">Multiple Choice</option>
+                                <option value="true_false">True/False</option>
+                                <option value="short_answer">Short Answer</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="q_time">Time Limit (seconds)</label>
+                            <input id="q_time" type="number" [(ngModel)]="currentQuestion.time_limit" class="form-input"
+                                min="0">
+                        </div>
+                    </div>
+
+                    <!-- MCQ Options -->
+                    <div *ngIf="currentQuestion.question_type === 'mcq'" class="options-section">
+                        <h3>Answer Options</h3>
+                        <div *ngFor="let option of currentQuestion.options; let i = index" class="option-item">
+                            <input type="text" [(ngModel)]="option.option_text" placeholder="Option text"
+                                class="form-input">
+                            <label class="checkbox">
+                                <input type="checkbox" [(ngModel)]="option.is_correct">
+                                Correct Answer
+                            </label>
+                            <button type="button" (click)="removeOption(i)"
+                                class="btn btn-danger btn-sm">Remove</button>
+                        </div>
+                        <button type="button" (click)="addOption()" class="btn btn-secondary btn-sm">+ Add
+                            Option</button>
+                    </div>
+
+                    <!-- Correct Answer -->
+                    <div class="form-group">
+                        <label for="q_answer">Correct Answer *</label>
+                        <input id="q_answer" type="text" [(ngModel)]="currentQuestion.correct_answer" class="form-input"
+                            required>
+                    </div>
+
+                    <!-- Explanation -->
+                    <div class="form-group">
+                        <label for="q_explain">Explanation</label>
+                        <textarea id="q_explain" [(ngModel)]="currentQuestion.explanation" class="form-textarea"
+                            rows="3"></textarea>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" (click)="closeQuestionForm()" class="btn btn-secondary">Cancel</button>
+                    <button type="button" (click)="saveQuestion()" class="btn btn-primary" [disabled]="loading">
+                        {{ loading ? 'Saving...' : 'Save Question' }}
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Questions List -->
+        <div class="questions-list">
+            <div *ngIf="questions.length === 0" class="empty-state">
+                <p>No questions yet. Create your first question to get started!</p>
+            </div>
+
+            <div *ngFor="let q of questions; let i = index" class="question-item">
+                <div class="question-header">
+                    <span class="question-number">Q{{ i + 1 }}</span>
+                    <span class="question-type-badge">{{ getQuestionTypeLabel(q.question_type) }}</span>
+                    <p class="question-text">{{ q.question_text }}</p>
+                </div>
+
+                <div class="question-actions">
+                    <button (click)="openQuestionForm(q)" class="btn btn-sm btn-secondary">Edit</button>
+                    <button (click)="deleteQuestion(q.id)" class="btn btn-sm btn-danger">Delete</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Delete Quiz Button -->
+    <div *ngIf="quizId" class="danger-zone">
+        <h3>Danger Zone</h3>
+        <button (click)="deleteQuiz()" class="btn btn-danger">Delete Entire Quiz</button>
+    </div>
+</div>

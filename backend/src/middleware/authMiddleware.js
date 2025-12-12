@@ -13,4 +13,18 @@ function authGuard(req, res, next) {
   }
 }
 
-module.exports = { authGuard };
+// Admin role check (requires authGuard to be called first)
+function adminOnly(req, res, next) {
+  if (!req.user) {
+    return res.status(401).json({ error: 'Authentication required' });
+  }
+
+  // Check if user role is Admin (case-insensitive)
+  if (req.user.role && req.user.role.toLowerCase() === 'admin') {
+    return next();
+  }
+
+  return res.status(403).json({ error: 'Admin access required' });
+}
+
+module.exports = { authGuard, adminOnly };

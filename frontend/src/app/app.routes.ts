@@ -16,7 +16,10 @@ export const routes: Routes = [
       { path: 'competencies', loadComponent: () => import('./pages/competencies/competencies').then(m => m.CompetenciesPage) },
       { path: 'add-course', component: AddCourse },
       { path: 'create-coursepage/:courseId', loadComponent: () => import('./pages/create-coursepage/create-coursepage').then(m => m.CreateCoursepage) },
-      { path: 'view-course', loadComponent: () => import('./pages/view-course/view-course').then(m => m.ViewCourse) }
+      { path: 'view-course', loadComponent: () => import('./pages/view-course/view-course').then(m => m.ViewCourse) },
+      { path: 'quiz', loadComponent: () => import('./components/quiz/quiz-list').then(m => m.QuizListComponent) },
+      { path: 'quiz/:quizId', loadComponent: () => import('./components/quiz/quiz-attempt').then(m => m.QuizAttemptComponent) },
+      { path: 'quiz/:quizId/attempt/:attemptId/results', loadComponent: () => import('./components/quiz/quiz-results').then(m => m.QuizResultsComponent) }
     ]
   },
 

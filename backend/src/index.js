@@ -2,6 +2,8 @@ const express = require('express');
 const cors = require('cors');
 const dotenv = require('dotenv');
 const authRoutes = require('./routes/auth');
+const quizRoutes = require('./routes/quiz');
+const adminQuizRoutes = require('./routes/admin-quiz');
 const competencyRoutes = require('./competencies/competencyRoutes');
 const certificateRoutes = require('./competencies/certificateRoutes');
 const { initializeDatabase } = require('./utils/db');
@@ -15,6 +17,8 @@ app.use(express.json());
 app.get('/health', (req, res) => res.json({ status: 'ok' }));
 
 app.use('/auth', authRoutes);
+app.use('/quiz', quizRoutes);
+app.use('/admin/quiz', adminQuizRoutes);
 app.use('/competencies', competencyRoutes);
 app.use('/certificates', certificateRoutes);
 

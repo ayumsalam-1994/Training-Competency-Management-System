@@ -24,7 +24,7 @@ router.post('/register', async (req, res) => {
     const token = jwt.sign(
       { id: user.id, email: user.email, roleId: user.role_id, role: role?.name || 'Employee' },
       process.env.JWT_SECRET || 'secret',
-      { expiresIn: process.env.TOKEN_EXPIRY || '1h' }
+      { expiresIn: process.env.TOKEN_EXPIRY || '24h' }
     );
 
     res.json({ token, user: { id: user.id, email: user.email, roleId: user.role_id } });
@@ -47,7 +47,7 @@ router.post('/login', async (req, res) => {
     const token = jwt.sign(
       { id: user.id, email: user.email, roleId: user.role_id, role: role?.name || 'Employee' },
       process.env.JWT_SECRET || 'secret',
-      { expiresIn: process.env.TOKEN_EXPIRY || '1h' }
+      { expiresIn: process.env.TOKEN_EXPIRY || '24h' }
     );
 
     res.json({ token, user: { id: user.id, email: user.email, roleId: user.role_id } });
@@ -61,7 +61,7 @@ router.get('/profile', authGuard, async (req, res) => {
   try {
     const user = await getUserById(req.user.id);
     if (!user) return res.status(404).json({ error: 'User not found' });
-    
+
     const role = await getRoleById(user.role_id);
     res.json({ user: { id: user.id, email: user.email, roleId: user.role_id, role: role?.name } });
   } catch (err) {

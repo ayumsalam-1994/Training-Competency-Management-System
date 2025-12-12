@@ -1,0 +1,68 @@
+<div class="results-container" *ngIf="results">
+    <div class="results-header">
+        <h1>{{ results.quiz_title }} - Results</h1>
+        <div class="score-display">
+            <div class="score-circle" [style.border-color]="getScoreColor()">
+                <span class="score-number">{{ results.percentage }}%</span>
+                <span class="score-label">
+                    {{ results.passed ? 'PASSED ✓' : 'FAILED ✗' }}
+                </span>
+            </div>
+        </div>
+    </div>
+
+    <div class="results-summary">
+        <div class="summary-item">
+            <span class="label">Score:</span>
+            <span class="value">{{ results.score }}/{{ results.total_questions }}</span>
+        </div>
+        <div class="summary-item">
+            <span class="label">Percentage:</span>
+            <span class="value">{{ results.percentage }}%</span>
+        </div>
+        <div class="summary-item">
+            <span class="label">Passing Score Required:</span>
+            <span class="value">{{ results.passing_score }}%</span>
+        </div>
+        <div class="summary-item">
+            <span class="label">Status:</span>
+            <span class="value" [style.color]="results.passed ? '#28a745' : '#dc3545'">
+                {{ results.passed ? 'PASSED' : 'FAILED' }}
+            </span>
+        </div>
+    </div>
+
+    <div class="answers-review">
+        <h2>Answer Review</h2>
+        <div *ngFor="let answer of results.answers; let i = index" class="answer-card">
+            <div class="answer-header" (click)="toggleQuestion(i)">
+                <div class="answer-status" [class.correct]="answer.is_correct" [class.incorrect]="!answer.is_correct">
+                    {{ answer.is_correct ? '✓' : '✗' }}
+                </div>
+                <div class="question-info">
+                    <p class="question-text">{{ answer.question_text }}</p>
+                    <p class="answer-summary">
+                        Your answer: <strong>{{ answer.user_answer }}</strong>
+                        <span *ngIf="!answer.is_correct"> | Correct: <strong>{{ answer.correct_answer }}</strong></span>
+                    </p>
+                </div>
+                <span class="toggle-icon">{{ expandedQuestions[i] ? '▼' : '▶' }}</span>
+            </div>
+
+            <div class="answer-details" *ngIf="expandedQuestions[i]">
+                <div class="explanation" *ngIf="answer.explanation">
+                    <strong>Explanation:</strong>
+                    <p>{{ answer.explanation }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="action-buttons">
+        <button class="btn btn-primary" (click)="retakeQuiz()">Retake Quiz</button>
+        <button class="btn btn-secondary" [routerLink]="['/quiz']">Back to Quizzes</button>
+    </div>
+</div>
+
+<div *ngIf="loading" class="loading">Loading results...</div>
+<div *ngIf="error" class="error-message">{{ error }}</div>
