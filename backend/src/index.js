@@ -2,6 +2,8 @@ const express = require('express');
 const cors = require('cors');
 const dotenv = require('dotenv');
 const authRoutes = require('./routes/auth');
+const competencyRoutes = require('./competencies/competencyRoutes');
+const certificateRoutes = require('./competencies/certificateRoutes');
 const { initializeDatabase } = require('./utils/db');
 
 dotenv.config();
@@ -13,6 +15,8 @@ app.use(express.json());
 app.get('/health', (req, res) => res.json({ status: 'ok' }));
 
 app.use('/auth', authRoutes);
+app.use('/competencies', competencyRoutes);
+app.use('/certificates', certificateRoutes);
 
 const PORT = process.env.PORT || 4000;
 
