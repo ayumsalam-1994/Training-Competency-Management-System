@@ -4,6 +4,8 @@ const dotenv = require('dotenv');
 const authRoutes = require('./routes/auth');
 const quizRoutes = require('./routes/quiz');
 const adminQuizRoutes = require('./routes/admin-quiz');
+const competencyRoutes = require('./competencies/competencyRoutes');
+const certificateRoutes = require('./competencies/certificateRoutes');
 const { initializeDatabase } = require('./utils/db');
 
 dotenv.config();
@@ -17,6 +19,8 @@ app.get('/health', (req, res) => res.json({ status: 'ok' }));
 app.use('/auth', authRoutes);
 app.use('/quiz', quizRoutes);
 app.use('/admin/quiz', adminQuizRoutes);
+app.use('/competencies', competencyRoutes);
+app.use('/certificates', certificateRoutes);
 
 const PORT = process.env.PORT || 4000;
 

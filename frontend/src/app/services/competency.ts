@@ -35,8 +35,22 @@ export class CompetencyService {
   }
 
   getCompetencies(): Observable<Competency[]> {
-    // Placeholder implementation - returns mock data until backend endpoints are ready
-    const mockCompetencies: Competency[] = [
+    // Real backend implementation
+    return this.http.get<Competency[]>(`${this.apiUrl}/competencies`, {
+      headers: this.getAuthHeaders()
+    });
+    
+    // Fallback to mock data if backend fails
+    // .pipe(
+    //   catchError(error => {
+    //     console.warn('Using mock data, backend not available:', error);
+    //     return of(this.getMockCompetencies());
+    //   })
+    // );
+  }
+
+  private getMockCompetencies(): Competency[] {
+    return [
       {
         id: 1,
         name: 'Basic Safety Training',
@@ -61,18 +75,25 @@ export class CompetencyService {
         achievedAt: '2024-02-20'
       }
     ];
-    
-    return of(mockCompetencies);
-    
-    // When backend is ready, uncomment this:
-    // return this.http.get<Competency[]>(`${this.apiUrl}/competencies`, {
-    //   headers: this.getAuthHeaders()
-    // });
   }
 
   getUserCertificates(): Observable<Certificate[]> {
-    // Placeholder implementation - returns mock data
-    const mockCertificates: Certificate[] = [
+    // Real backend implementation
+    return this.http.get<Certificate[]>(`${this.apiUrl}/certificates`, {
+      headers: this.getAuthHeaders()
+    });
+    
+    // Fallback to mock data if backend fails
+    // .pipe(
+    //   catchError(error => {
+    //     console.warn('Using mock data, backend not available:', error);
+    //     return of(this.getMockCertificates());
+    //   })
+    // );
+  }
+
+  private getMockCertificates(): Certificate[] {
+    return [
       {
         id: 1,
         competencyId: 1,
@@ -90,13 +111,6 @@ export class CompetencyService {
         status: 'expiring-soon'
       }
     ];
-    
-    return of(mockCertificates);
-    
-    // When backend is ready, uncomment this:
-    // return this.http.get<Certificate[]>(`${this.apiUrl}/certificates`, {
-    //   headers: this.getAuthHeaders()
-    // });
   }
 
   downloadCertificate(certificateId: number): Observable<Blob> {

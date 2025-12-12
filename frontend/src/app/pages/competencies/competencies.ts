@@ -1,13 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterLink } from '@angular/router';
 import { CompetencyService, Competency, Certificate } from '../../services/competency';
 import { AuthService, User } from '../../services/auth';
 
 @Component({
   selector: 'app-competencies',
   standalone: true,
-  imports: [CommonModule, RouterLink],
+  imports: [CommonModule],
   templateUrl: './competencies.html',
   styleUrls: ['./competencies.css']
 })
